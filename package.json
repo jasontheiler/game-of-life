@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "name": "game-of-life",
+  "license": "GPL-3.0",
+  "scripts": {
+    "fmt": "prettier --write \"**/*.{vue,ts,js,json,css,md}\"",
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/pwa": "^3.3.5",
+    "@nuxtjs/robots": "^2.5.0",
+    "nuxt": "^2.15.4"
+  },
+  "devDependencies": {
+    "@fontsource/inter": "^4.2.2",
+    "@nuxt/types": "^2.15.4",
+    "@nuxt/typescript-build": "^2.1.0",
+    "@nuxtjs/color-mode": "^2.0.5",
+    "@nuxtjs/composition-api": "^0.23.1",
+    "@nuxtjs/tailwindcss": "^4.0.3",
+    "@wasm-tool/wasm-pack-plugin": "^1.4.0",
+    "focus-visible": "^5.2.0",
+    "postcss": "^8.2.10",
+    "postcss-focus-visible": "^5.0.0",
+    "prettier": "^2.2.1"
+  }
+}
