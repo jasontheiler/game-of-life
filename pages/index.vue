@@ -1,32 +1,56 @@
 <template>
   <div class="w-full h-screen flex flex-col justify-center items-center">
-    <main>
-      <canvas class="w-full shadow-lg" ref="canvas" />
+    <main class="w-full h-1/2" ref="canvasWrapper">
+      <canvas ref="canvas" />
     </main>
 
     <aside>
-      <button>Play</button>
+      <button class="m-4" @click="toggleLoop">
+        {{ isLooping ? "Pause" : "Play" }}
+      </button>
     </aside>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@nuxtjs/composition-api";
+import {
+  defineComponent,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+} from "@nuxtjs/composition-api";
 
 import { useUniverse } from "~/composables";
 
-const WIDTH = 10;
-const HEIGHT = 10;
-const CELL_SIZE = 10;
-const GRID_COLOR = "#CCCCCC";
-const CELL_COLOR = "#000000";
-
 export default defineComponent({
   setup() {
-    const { canvas } = useUniverse(WIDTH, HEIGHT);
+    const canvasWrapper = ref<HTMLDivElement | null>(null);
+    const {
+      canvas,
+      canvasWidth,
+      canvasHeight,
+      toggleLoop,
+      isLooping,
+    } = useUniverse();
+
+    const onResize = () => {
+      canvasWidth.value = canvasWrapper.value?.clientWidth ?? 1;
+      canvasHeight.value = canvasWrapper.value?.clientHeight ?? 1;
+    };
+
+    onMounted(() => {
+      window.addEventListener("resize", onResize);
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener("resize", onResize);
+    });
 
     return {
+      canvasWrapper,
       canvas,
+      toggleLoop,
+      isLooping,
     };
   },
 });
