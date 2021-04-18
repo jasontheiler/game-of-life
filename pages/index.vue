@@ -1,24 +1,32 @@
 <template>
-  <main>
-    <button @click="greet('there')">Alert</button>
-  </main>
+  <div class="w-full h-screen flex flex-col justify-center items-center">
+    <main>
+      <canvas class="w-full shadow-lg" ref="canvas" />
+    </main>
+
+    <aside>
+      <button>Play</button>
+    </aside>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "@nuxtjs/composition-api";
+import { defineComponent } from "@nuxtjs/composition-api";
+
+import { useUniverse } from "~/composables";
+
+const WIDTH = 10;
+const HEIGHT = 10;
+const CELL_SIZE = 10;
+const GRID_COLOR = "#CCCCCC";
+const CELL_COLOR = "#000000";
 
 export default defineComponent({
   setup() {
-    const greet = ref((_s: string) => {});
-
-    onMounted(async () => {
-      const module = await import("~/wasm/universe/pkg");
-
-      greet.value = module.greet;
-    });
+    const { canvas } = useUniverse(WIDTH, HEIGHT);
 
     return {
-      greet,
+      canvas,
     };
   },
 });
