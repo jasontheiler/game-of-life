@@ -15,19 +15,17 @@ enum Cell {
 #[wasm_bindgen]
 pub struct Universe {
     canvas: HtmlCanvasElement,
+    cell_size: u32,
     rows: u32,
     cols: u32,
     cells: Vec<Cell>,
-    cell_size: u32,
 }
 
 #[wasm_bindgen]
 impl Universe {
     #[wasm_bindgen(constructor)]
-    pub fn new(canvas: HtmlCanvasElement, width: u32, height: u32) -> Universe {
+    pub fn new(canvas: HtmlCanvasElement, width: u32, height: u32, cell_size: u32) -> Universe {
         utils::set_panic_hook();
-
-        let cell_size = 10;
 
         canvas.set_width(width);
         canvas.set_height(height);
@@ -54,10 +52,10 @@ impl Universe {
 
         Universe {
             canvas,
+            cell_size,
             rows,
             cols,
             cells,
-            cell_size,
         }
     }
 
@@ -88,6 +86,9 @@ impl Universe {
                 }
             })
             .collect();
+
+        self.draw_grid();
+        self.draw_cells();
     }
 
     pub fn tick(&mut self) {
@@ -154,34 +155,57 @@ impl Universe {
         self.draw_cells();
     }
 
-    fn draw_grid(&self) {}
+    fn draw_grid(&self) {
+        let ctx = js::get_canvas_context_2d(&self.canvas);
+
+        ctx.begin_path();
+        ctx.set_stroke_style(&JsValue::from("#CCCCCC"));
+
+        for i in 1..self.rows {
+            ctx.move_to(0.0, (i * (self.cell_size + 1) + 1) as f64);
+            ctx.line_to(
+                ((self.cell_size + 1) * self.cols + 1) as f64,
+                (i * (self.cell_size + 1) + 1) as f64,
+            );
+        }
+
+        for i in 1..self.cols {
+            ctx.move_to((i * (self.cell_size + 1) + 1) as f64, 0.0);
+            ctx.line_to(
+                (i * (self.cell_size + 1) + 1) as f64,
+                ((self.cell_size + 1) * self.rows + 1) as f64,
+            );
+        }
+
+        ctx.stroke();
+    }
 
     fn draw_cells(&self) {
         let ctx = js::get_canvas_context_2d(&self.canvas);
 
-        ctx.clear_rect(
-            0 as f64,
-            0 as f64,
-            self.canvas.width() as f64,
-            self.canvas.height() as f64,
-        );
-
         ctx.begin_path();
-
         ctx.set_fill_style(&JsValue::from("#000000"));
 
         for row in 0..self.rows {
             for col in 0..self.cols {
-                if let Cell::Dead = self.cells[self.get_index(row, col)] {
-                    continue;
+                match self.cells[self.get_index(row, col)] {
+                    Cell::Dead => {
+                        ctx.clear_rect(
+                            (col * (self.cell_size + 1) + 1) as f64,
+                            (row * (self.cell_size + 1) + 1) as f64,
+                            self.cell_size as f64,
+                            self.cell_size as f64,
+                        );
+                    }
+                    Cell::Alive => {
+                        ctx.fill_rect(
+                            (col * (self.cell_size + 1) + 1) as f64,
+                            (row * (self.cell_size + 1) + 1) as f64,
+                            self.cell_size as f64,
+                            self.cell_size as f64,
+                        );
+                    }
                 }
-
-                ctx.fill_rect(
-                    (col * (self.cell_size + 1) + 1) as f64,
-                    (row * (self.cell_size + 1) + 1) as f64,
-                    self.cell_size as f64,
-                    self.cell_size as f64,
-                );
             }
         }
 

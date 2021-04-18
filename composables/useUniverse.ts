@@ -1,12 +1,10 @@
-import { onMounted, Ref, ref, watchEffect } from "@nuxtjs/composition-api";
+import { onMounted, ref, watchEffect } from "@nuxtjs/composition-api";
 
-export const useUniverse = (
-  canvasWidth: Ref<number> | number = 1,
-  canvasHeight: Ref<number> | number = 1
-) => {
+export const useUniverse = () => {
   const canvas = ref<HTMLCanvasElement | null>(null);
-  const canvasWidthRef = ref(canvasWidth);
-  const canvasHeightRef = ref(canvasHeight);
+  const canvasWidth = ref(1);
+  const canvasHeight = ref(1);
+  const cellSize = ref(1);
 
   const toggleLoop = ref(() => {});
   const isLooping = ref(false);
@@ -18,12 +16,13 @@ export const useUniverse = (
     if (canvas.value) {
       const universe = new Universe(
         canvas.value,
-        canvasWidthRef.value,
-        canvasHeightRef.value
+        canvasWidth.value,
+        canvasHeight.value,
+        cellSize.value
       );
 
       watchEffect(() =>
-        universe.setSize(canvasWidthRef.value, canvasHeightRef.value)
+        universe.setSize(canvasWidth.value, canvasHeight.value)
       );
 
       toggleLoop.value = () => {
@@ -46,8 +45,9 @@ export const useUniverse = (
 
   return {
     canvas,
-    canvasWidth: canvasWidthRef,
-    canvasHeight: canvasHeightRef,
+    canvasWidth,
+    canvasHeight,
+    cellSize,
     toggleLoop,
     isLooping,
   };

@@ -13,14 +13,9 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-} from "@nuxtjs/composition-api";
+import { defineComponent, ref } from "@nuxtjs/composition-api";
 
-import { useUniverse } from "~/composables";
+import { useUniverse, useOnResize } from "~/composables";
 
 export default defineComponent({
   setup() {
@@ -29,22 +24,20 @@ export default defineComponent({
       canvas,
       canvasWidth,
       canvasHeight,
+      cellSize,
       toggleLoop,
       isLooping,
     } = useUniverse();
 
-    const onResize = () => {
-      canvasWidth.value = canvasWrapper.value?.clientWidth ?? 1;
-      canvasHeight.value = canvasWrapper.value?.clientHeight ?? 1;
-    };
+    useOnResize(
+      () => {
+        canvasWidth.value = canvasWrapper.value?.clientWidth ?? 1;
+        canvasHeight.value = canvasWrapper.value?.clientHeight ?? 1;
+      },
+      { onMounted: true }
+    );
 
-    onMounted(() => {
-      window.addEventListener("resize", onResize);
-    });
-
-    onBeforeUnmount(() => {
-      window.removeEventListener("resize", onResize);
-    });
+    cellSize.value = 16;
 
     return {
       canvasWrapper,
