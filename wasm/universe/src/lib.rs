@@ -14,9 +14,10 @@ enum Cell {
 #[wasm_bindgen]
 pub struct Universe {
     canvas: HtmlCanvasElement,
-    width: u32,
-    height: u32,
+    rows: u32,
+    cols: u32,
     cells: Vec<Cell>,
+    cell_size: u32,
 }
 
 #[wasm_bindgen]
@@ -25,6 +26,10 @@ impl Universe {
     pub fn new(canvas: HtmlCanvasElement, width: u32, height: u32) -> Universe {
         utils::set_panic_hook();
 
+        let cell_size = 10;
+
+        let rows = height / cell_size;
+        let cols = width / cell_size;
         let cells = (0..width * height)
             .map(|idx| {
                 if idx % 2 == 0 || idx % 7 == 0 {
@@ -37,22 +42,30 @@ impl Universe {
 
         Universe {
             canvas,
-            width,
-            height,
+            rows,
+            cols,
             cells,
+            cell_size,
         }
     }
 
+    /// Sets the canvas size and recalculates the number of rows and columns.
+    ///
+    /// Also kills all cells.
     #[wasm_bindgen(js_name = setSize)]
     pub fn set_size(&mut self, width: u32, height: u32) {
-        self.width = width;
-        self.height = height;
-        self.cells = (0..width * height).map(|_| Cell::Dead).collect();
+        let rows = height / self.cell_size;
+        let cols = width / self.cell_size;
+
+        self.canvas.set_width(width);
+        self.canvas.set_height(height);
+        self.rows = rows;
+        self.cols = cols;
+        self.cells = (0..rows * cols).map(|_| Cell::Dead).collect();
     }
 
-    #[wasm_bindgen(js_name = toggleCell)]
-    pub fn toggle_cell(&mut self, x: u32, y: u32) {
-        let idx = self.get_index(x, y);
+    fn toggle_cell(&mut self, row: u32, col: u32) {
+        let idx = self.get_index(row, col);
 
         self.cells[idx] = match self.cells[idx] {
             Cell::Alive => Cell::Dead,
@@ -60,11 +73,11 @@ impl Universe {
         }
     }
 
-    pub fn tick(&mut self) {
+    fn tick(&mut self) {
         let mut next = self.cells.clone();
 
-        for row in 0..self.height {
-            for col in 0..self.width {
+        for row in 0..self.rows {
+            for col in 0..self.cols {
                 let idx = self.get_index(row, col);
                 let cell = self.cells[idx];
                 let live_neighbors = self.live_neighbor_count(row, col);
@@ -92,10 +105,10 @@ impl Universe {
     fn live_neighbor_count(&self, row: u32, col: u32) -> u8 {
         let mut count = 0;
 
-        let north = if row == 0 { self.height - 1 } else { row - 1 };
-        let south = if row == self.height - 1 { 0 } else { row + 1 };
-        let west = if col == 0 { self.width - 1 } else { col - 1 };
-        let east = if col == self.width - 1 { 0 } else { col + 1 };
+        let north = if row == 0 { self.rows - 1 } else { row - 1 };
+        let south = if row == self.rows - 1 { 0 } else { row + 1 };
+        let west = if col == 0 { self.cols - 1 } else { col - 1 };
+        let east = if col == self.cols - 1 { 0 } else { col + 1 };
 
         count += self.cells[self.get_index(north, west)] as u8;
         count += self.cells[self.get_index(north, col)] as u8;
@@ -110,6 +123,6 @@ impl Universe {
     }
 
     fn get_index(&self, row: u32, col: u32) -> usize {
-        (row * self.width + col) as usize
+        (row * self.cols + col) as usize
     }
 }
