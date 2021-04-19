@@ -5,10 +5,10 @@ export const useUniverse = () => {
   const canvasWidth = ref(1);
   const canvasHeight = ref(1);
   const cellSize = ref(1);
+  const toggleCell = ref((_event: MouseEvent) => {});
 
   const toggleLoop = ref(() => {});
   const isLooping = ref(false);
-  const animationId = ref<number | null>(null);
 
   onMounted(async () => {
     const { Universe } = await import("~/wasm/universe/pkg");
@@ -21,23 +21,42 @@ export const useUniverse = () => {
         cellSize.value
       );
 
-      watchEffect(() =>
-        universe.setSize(canvasWidth.value, canvasHeight.value)
-      );
+      universe.drawGrid("#cccccc");
+      universe.drawCells("#000000");
+
+      watchEffect(() => {
+        universe.setSize(canvasWidth.value, canvasHeight.value);
+        universe.drawGrid("#cccccc");
+        universe.drawCells("#000000");
+      });
+
+      watchEffect(() => {
+        universe.setCellSize(cellSize.value);
+        universe.drawGrid("#cccccc");
+        universe.drawCells("#000000");
+      });
+
+      toggleCell.value = ({ offsetX, offsetY }: MouseEvent) => {
+        universe.toggleCellAt(offsetX, offsetY);
+        universe.drawCells("#000000");
+      };
+
+      let animationId: number | null = null;
 
       toggleLoop.value = () => {
-        if (animationId.value) {
-          cancelAnimationFrame(animationId.value);
+        if (animationId) {
+          cancelAnimationFrame(animationId);
           isLooping.value = false;
-          animationId.value = null;
+          animationId = null;
         } else {
           const render = () => {
             universe.tick();
-            animationId.value = requestAnimationFrame(render);
+            universe.drawCells("#000000");
+            animationId = requestAnimationFrame(render);
           };
 
           isLooping.value = true;
-          animationId.value = requestAnimationFrame(render);
+          animationId = requestAnimationFrame(render);
         }
       };
     }
@@ -48,6 +67,7 @@ export const useUniverse = () => {
     canvasWidth,
     canvasHeight,
     cellSize,
+    toggleCell,
     toggleLoop,
     isLooping,
   };

@@ -1,11 +1,11 @@
 <template>
   <div class="w-full h-screen flex flex-col justify-center items-center">
-    <main class="w-full h-1/2" ref="canvasWrapper">
-      <canvas ref="canvas" />
+    <main ref="canvasWrapper" class="w-full h-3/4">
+      <canvas ref="canvas" @click="toggleCell" />
     </main>
 
     <aside>
-      <button class="m-4" @click="toggleLoop">
+      <button class="m-8" @click="toggleLoop">
         {{ isLooping ? "Pause" : "Play" }}
       </button>
     </aside>
@@ -25,6 +25,7 @@ export default defineComponent({
       canvasWidth,
       canvasHeight,
       cellSize,
+      toggleCell,
       toggleLoop,
       isLooping,
     } = useUniverse();
@@ -42,6 +43,7 @@ export default defineComponent({
     return {
       canvasWrapper,
       canvas,
+      toggleCell,
       toggleLoop,
       isLooping,
     };

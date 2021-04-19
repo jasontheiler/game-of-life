@@ -16,6 +16,8 @@ enum Cell {
 pub struct Universe {
     canvas: HtmlCanvasElement,
     cell_size: u32,
+    offset_x: u32,
+    offset_y: u32,
     rows: u32,
     cols: u32,
     cells: Vec<Cell>,
@@ -30,65 +32,162 @@ impl Universe {
         canvas.set_width(width);
         canvas.set_height(height);
 
-        let rows = (height - 1) / (cell_size + 1);
-        let cols = (width - 1) / (cell_size + 1);
-        let cells = (0..rows * cols)
-            .map(|idx| {
-                if idx == 4 {
-                    Cell::Alive
-                } else if idx == cols + 2 {
-                    Cell::Alive
-                } else if idx == cols + 4 {
-                    Cell::Alive
-                } else if idx == 2 * cols + 3 {
-                    Cell::Alive
-                } else if idx == 2 * cols + 4 {
-                    Cell::Alive
-                } else {
-                    Cell::Dead
-                }
-            })
-            .collect();
+        let offset_x = (width % (cell_size + 1)) / 2;
+        let offset_y = (height % (cell_size + 1)) / 2;
+        let rows = height / (cell_size + 1);
+        let cols = width / (cell_size + 1);
+        let cells = (0..rows * cols).map(|_| Cell::Dead).collect();
 
         Universe {
             canvas,
             cell_size,
+            offset_x,
+            offset_y,
             rows,
             cols,
             cells,
         }
     }
 
-    /// Sets the canvas size and recalculates the number of rows and columns.
+    #[wasm_bindgen(js_name = drawGrid)]
+    pub fn draw_grid(&self, color: &str) {
+        let ctx = js::get_canvas_context_2d(&self.canvas);
+
+        ctx.begin_path();
+        ctx.set_stroke_style(&JsValue::from(color));
+
+        for i in 1..self.rows {
+            let y = (i * (self.cell_size + 1) + self.offset_y) as f64;
+
+            ctx.move_to(self.offset_x as f64, y);
+            ctx.line_to((self.cols * (self.cell_size + 1) + self.offset_x) as f64, y);
+        }
+
+        for i in 1..self.cols {
+            let x = (i * (self.cell_size + 1) + self.offset_x) as f64;
+
+            ctx.move_to(x, self.offset_y as f64);
+            ctx.line_to(x, (self.rows * (self.cell_size + 1) + self.offset_y) as f64);
+        }
+
+        ctx.stroke();
+    }
+
+    #[wasm_bindgen(js_name = drawCells)]
+    pub fn draw_cells(&self, color: &str) {
+        let ctx = js::get_canvas_context_2d(&self.canvas);
+
+        ctx.begin_path();
+        ctx.set_fill_style(&JsValue::from(color));
+
+        for row in 0..self.rows {
+            for col in 0..self.cols {
+                match self.cells[self.get_index(row, col)] {
+                    Cell::Dead => {
+                        ctx.clear_rect(
+                            (col * (self.cell_size + 1) + self.offset_x) as f64,
+                            (row * (self.cell_size + 1) + self.offset_y) as f64,
+                            self.cell_size as f64,
+                            self.cell_size as f64,
+                        );
+                    }
+                    Cell::Alive => {
+                        ctx.fill_rect(
+                            (col * (self.cell_size + 1) + self.offset_x) as f64,
+                            (row * (self.cell_size + 1) + self.offset_y) as f64,
+                            self.cell_size as f64,
+                            self.cell_size as f64,
+                        );
+                    }
+                }
+            }
+        }
+
+        ctx.stroke();
+    }
+
+    /// Sets the universe's size to the specified `width` and `height` and
+    /// recalculates the number of rows and columns.
     ///
-    /// Also kills all cells.
+    /// **Also kills all cells.**
+    ///
+    /// # Examples
+    ///
+    /// ```ts
+    /// const universe = new Universe(canvas, 512, 512, 16);
+    ///
+    /// universe.setSize(768, 256);
+    ///
+    /// // You need to manually redraw the grid and the cells afterwards.
+    /// universe.drawGrid("#cccccc");
+    /// universe.drawCells("#000000");
+    /// ```
     #[wasm_bindgen(js_name = setSize)]
     pub fn set_size(&mut self, width: u32, height: u32) {
         self.canvas.set_width(width);
         self.canvas.set_height(height);
 
-        self.rows = (height - 1) / (self.cell_size + 1);
-        self.cols = (width - 1) / (self.cell_size + 1);
-        self.cells = (0..self.rows * self.cols)
-            .map(|idx| {
-                if idx == 4 {
-                    Cell::Alive
-                } else if idx == self.cols + 2 {
-                    Cell::Alive
-                } else if idx == self.cols + 4 {
-                    Cell::Alive
-                } else if idx == 2 * self.cols + 3 {
-                    Cell::Alive
-                } else if idx == 2 * self.cols + 4 {
-                    Cell::Alive
-                } else {
-                    Cell::Dead
-                }
-            })
-            .collect();
+        self.offset_x = (width % (self.cell_size + 1)) / 2;
+        self.offset_y = (height % (self.cell_size + 1)) / 2;
+        self.rows = height / (self.cell_size + 1);
+        self.cols = width / (self.cell_size + 1);
+        self.cells = (0..self.rows * self.cols).map(|_| Cell::Dead).collect();
+    }
 
-        self.draw_grid();
-        self.draw_cells();
+    /// Sets the universe's cell size to the specified `size` and recalculates the
+    /// number of rows and columns.
+    ///
+    /// **Also kills all cells.**
+    ///
+    /// # Examples
+    ///
+    /// ```ts
+    /// const universe = new Universe(canvas, 512, 512, 16);
+    ///
+    /// universe.setCellSize(24);
+    ///
+    /// // You need to manually redraw the grid and the cells afterwards.
+    /// universe.drawGrid("#cccccc");
+    /// universe.drawCells("#000000");
+    /// ```
+    #[wasm_bindgen(js_name = setCellSize)]
+    pub fn set_cell_size(&mut self, size: u32) {
+        self.cell_size = size;
+
+        self.offset_x = (self.canvas.width() % (size + 1)) / 2;
+        self.offset_y = (self.canvas.height() % (size + 1)) / 2;
+        self.rows = self.canvas.height() / (size + 1);
+        self.cols = self.canvas.width() / (size + 1);
+        self.cells = (0..self.rows * self.cols).map(|_| Cell::Dead).collect();
+    }
+
+    /// Toggles the cell at the specified `x` and `y` coordinates.
+    ///
+    /// # Examples
+    ///
+    /// ```ts
+    /// const universe = new Universe(canvas, 512, 512, 16);
+    ///
+    /// universe.toggleCellAt(128, 256);
+    ///
+    /// // You need to manually redraw the cells afterwards.
+    /// universe.drawCells("#000000");
+    /// ```
+    #[wasm_bindgen(js_name = toggleCellAt)]
+    pub fn toggle_cell_at(&mut self, x: u32, y: u32) {
+        let row = (y - self.offset_y) / (self.cell_size + 1);
+        let col = (x - self.offset_x) / (self.cell_size + 1);
+
+        if row >= self.rows || col >= self.cols {
+            return;
+        }
+
+        let idx = self.get_index(row, col);
+
+        self.cells[idx] = match self.cells[idx] {
+            Cell::Alive => Cell::Dead,
+            Cell::Dead => Cell::Alive,
+        };
     }
 
     pub fn tick(&mut self) {
@@ -120,8 +219,6 @@ impl Universe {
         }
 
         self.cells = next;
-
-        self.draw_cells();
     }
 
     fn live_neighbor_count(&self, row: u32, col: u32) -> u8 {
@@ -142,74 +239,6 @@ impl Universe {
         count += self.cells[self.get_index(south, east)] as u8;
 
         count
-    }
-
-    fn toggle_cell(&mut self, row: u32, col: u32) {
-        let idx = self.get_index(row, col);
-
-        self.cells[idx] = match self.cells[idx] {
-            Cell::Alive => Cell::Dead,
-            Cell::Dead => Cell::Alive,
-        };
-
-        self.draw_cells();
-    }
-
-    fn draw_grid(&self) {
-        let ctx = js::get_canvas_context_2d(&self.canvas);
-
-        ctx.begin_path();
-        ctx.set_stroke_style(&JsValue::from("#CCCCCC"));
-
-        for i in 1..self.rows {
-            ctx.move_to(0.0, (i * (self.cell_size + 1) + 1) as f64);
-            ctx.line_to(
-                ((self.cell_size + 1) * self.cols + 1) as f64,
-                (i * (self.cell_size + 1) + 1) as f64,
-            );
-        }
-
-        for i in 1..self.cols {
-            ctx.move_to((i * (self.cell_size + 1) + 1) as f64, 0.0);
-            ctx.line_to(
-                (i * (self.cell_size + 1) + 1) as f64,
-                ((self.cell_size + 1) * self.rows + 1) as f64,
-            );
-        }
-
-        ctx.stroke();
-    }
-
-    fn draw_cells(&self) {
-        let ctx = js::get_canvas_context_2d(&self.canvas);
-
-        ctx.begin_path();
-        ctx.set_fill_style(&JsValue::from("#000000"));
-
-        for row in 0..self.rows {
-            for col in 0..self.cols {
-                match self.cells[self.get_index(row, col)] {
-                    Cell::Dead => {
-                        ctx.clear_rect(
-                            (col * (self.cell_size + 1) + 1) as f64,
-                            (row * (self.cell_size + 1) + 1) as f64,
-                            self.cell_size as f64,
-                            self.cell_size as f64,
-                        );
-                    }
-                    Cell::Alive => {
-                        ctx.fill_rect(
-                            (col * (self.cell_size + 1) + 1) as f64,
-                            (row * (self.cell_size + 1) + 1) as f64,
-                            self.cell_size as f64,
-                            self.cell_size as f64,
-                        );
-                    }
-                }
-            }
-        }
-
-        ctx.stroke();
     }
 
     fn get_index(&self, row: u32, col: u32) -> usize {
