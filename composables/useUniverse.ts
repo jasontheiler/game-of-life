@@ -2,9 +2,9 @@ import { onMounted, ref, watchEffect } from "@nuxtjs/composition-api";
 
 export const useUniverse = () => {
   const canvas = ref<HTMLCanvasElement | null>(null);
-  const canvasWidth = ref(1);
-  const canvasHeight = ref(1);
-  const cellSize = ref(1);
+  const canvasWidth = ref(0);
+  const canvasHeight = ref(0);
+  const cellSize = ref(0);
   const toggleCell = ref((_event: MouseEvent) => {});
 
   const toggleLoop = ref(() => {});
@@ -18,27 +18,19 @@ export const useUniverse = () => {
         canvas.value,
         canvasWidth.value,
         canvasHeight.value,
-        cellSize.value
+        cellSize.value,
+        "#cccccc",
+        "#000000"
       );
 
-      universe.drawGrid("#cccccc");
-      universe.drawCells("#000000");
+      watchEffect(() =>
+        universe.setSize(canvasWidth.value, canvasHeight.value)
+      );
 
-      watchEffect(() => {
-        universe.setSize(canvasWidth.value, canvasHeight.value);
-        universe.drawGrid("#cccccc");
-        universe.drawCells("#000000");
-      });
-
-      watchEffect(() => {
-        universe.setCellSize(cellSize.value);
-        universe.drawGrid("#cccccc");
-        universe.drawCells("#000000");
-      });
+      watchEffect(() => universe.setCellSize(cellSize.value));
 
       toggleCell.value = ({ offsetX, offsetY }: MouseEvent) => {
         universe.toggleCellAt(offsetX, offsetY);
-        universe.drawCells("#000000");
       };
 
       let animationId: number | null = null;
@@ -46,12 +38,11 @@ export const useUniverse = () => {
       toggleLoop.value = () => {
         if (animationId) {
           cancelAnimationFrame(animationId);
-          isLooping.value = false;
           animationId = null;
+          isLooping.value = false;
         } else {
           const render = () => {
             universe.tick();
-            universe.drawCells("#000000");
             animationId = requestAnimationFrame(render);
           };
 
