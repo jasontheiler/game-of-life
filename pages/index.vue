@@ -30,13 +30,10 @@ export default defineComponent({
       isLooping,
     } = useUniverse();
 
-    useOnResize(
-      () => {
-        canvasWidth.value = canvasWrapper.value?.clientWidth ?? 1;
-        canvasHeight.value = canvasWrapper.value?.clientHeight ?? 1;
-      },
-      { onMounted: true }
-    );
+    useOnResize(() => {
+      canvasWidth.value = canvasWrapper.value?.clientWidth ?? 1;
+      canvasHeight.value = canvasWrapper.value?.clientHeight ?? 1;
+    }, true);
 
     cellSize.value = 16;
 

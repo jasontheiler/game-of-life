@@ -1,2 +1,2 @@
-export * from "./useOnResize";
-export * from "./useUniverse";
+export * from "./onResize";
+export * from "./universe";

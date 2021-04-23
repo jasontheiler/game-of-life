@@ -95,6 +95,14 @@ const config: NuxtConfig = {
   },
 
   /*
+   * Color mode configuration
+   * See: https://color-mode.nuxtjs.org/#configuration
+   */
+  colorMode: {
+    classSuffix: "",
+  },
+
+  /*
    * Tailwind CSS configuration
    * See: https://tailwindcss.nuxtjs.org/options
    */

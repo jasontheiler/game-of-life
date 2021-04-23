@@ -29,7 +29,7 @@ export const useUniverse = () => {
 
       watchEffect(() => universe.setCellSize(cellSize.value));
 
-      toggleCell.value = ({ offsetX, offsetY }: MouseEvent) => {
+      toggleCell.value = ({ offsetX, offsetY }) => {
         universe.toggleCellAt(offsetX, offsetY);
       };
 
