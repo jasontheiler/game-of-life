@@ -33,6 +33,19 @@ const config: NuxtConfig = {
     baseUrl,
   },
 
+  // Page metadata
+  // See: https://nuxtjs.org/guides/configuration-glossary/configuration-head/
+  head: {
+    meta: [
+      {
+        hid: "viewport",
+        name: "viewport",
+        content:
+          "width=device-width, initial-scale=1.0, maximum-scale=1.0 user-scalable=0",
+      },
+    ],
+  },
+
   // Global CSS
   // See: https://nuxtjs.org/guides/configuration-glossary/configuration-css/
   css: ["@fontsource/inter/latin.css"],

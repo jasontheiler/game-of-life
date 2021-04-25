@@ -1,10 +1,14 @@
 <template>
-  <div class="w-full h-screen flex flex-col overflow-hidden">
+  <div class="w-full h-screen flex flex-col-reverse overflow-hidden">
     <main
       :class="{ '-translate-y-1/3 scale-75': isOpen }"
-      class="flex-1 w-full p-4 pb-0 flex flex-col rounded-b-2xl border border-t-0 border-white border-opacity-25 bg-white bg-opacity-25 filter blur-md shadow-2xl transform-gpu transition-transform duration-500"
+      class="absolute inset-x-2 top-0 bottom-[7.5rem] flex flex-col rounded-b-2xl border border-t-0 border-white border-opacity-20 bg-white bg-opacity-20 backdrop-blur shadow-2xl transform-gpu transition-transform duration-500"
     >
-      <canvas ref="canvas" class="w-full h-full" @click="toggleCell" />
+      <section class="w-full h-full px-4 pt-4 overflow-hidden">
+        <div ref="canvasWrapper" class="w-full h-full">
+          <canvas ref="canvas" class="cursor-pointer" @click="toggleCell" />
+        </div>
+      </section>
 
       <button
         class="w-full h-12 rounded-2xl text-center text-xl text-black text-opacity-20 hover:text-opacity-30 focus-visible:outline-none focus-visible:ring focus-visible:ring-teal-100 transition duration-150"
@@ -18,18 +22,14 @@
       </button>
     </main>
 
-    <aside
-      class="w-full max-w-screen-md mx-auto px-4 py-6 flex justify-around items-center"
-    >
-      <AppIconButton icon="undo-alt" @click="reset" />
+    <aside class="w-full max-w-screen-md mx-auto px-6">
+      <TheSettings />
 
-      <AppIconButton
-        :icon="isLooping ? 'pause' : 'play'"
-        size="lg"
-        @click="toggleLoop"
+      <TheControls
+        :isPlaying="isPlaying"
+        @reset="reset"
+        @togglePlay="togglePlay"
       />
-
-      <AppIconButton icon="pen-square" />
     </aside>
   </div>
 </template>
@@ -41,7 +41,7 @@ import { useUniverse, useOnResize } from "~/composables";
 
 export default defineComponent({
   setup() {
-    // const canvasWrapper = ref<HTMLDivElement | null>(null);
+    const canvasWrapper = ref<HTMLDivElement | null>(null);
     const {
       canvas,
       canvasWidth,
@@ -49,13 +49,15 @@ export default defineComponent({
       cellSize,
       toggleCell,
       reset,
-      toggleLoop,
-      isLooping,
+      togglePlay,
+      isPlaying,
     } = useUniverse();
 
     useOnResize(() => {
-      canvasWidth.value = canvas.value?.clientWidth ?? 1;
-      canvasHeight.value = canvas.value?.clientHeight ?? 1;
+      if (canvasWrapper.value) {
+        canvasWidth.value = canvasWrapper.value?.clientWidth;
+        canvasHeight.value = canvasWrapper.value?.clientHeight;
+      }
     }, true);
 
     cellSize.value = 16;
@@ -63,14 +65,20 @@ export default defineComponent({
     const isOpen = ref(false);
 
     return {
-      // canvasWrapper,
+      canvasWrapper,
       canvas,
       toggleCell,
       reset,
-      toggleLoop,
-      isLooping,
+      togglePlay,
+      isPlaying,
       isOpen,
     };
   },
 });
 </script>
+
+<style scoped>
+.backdrop-blur {
+  backdrop-filter: blur(12px);
+}
+</style>

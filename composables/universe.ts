@@ -8,8 +8,8 @@ export const useUniverse = () => {
   const toggleCell = ref((_event: MouseEvent) => {});
   const reset = ref(() => {});
 
-  const toggleLoop = ref(() => {});
-  const isLooping = ref(false);
+  const togglePlay = ref(() => {});
+  const isPlaying = ref(false);
 
   onMounted(async () => {
     const { Universe } = await import("~/wasm/universe/pkg");
@@ -36,18 +36,18 @@ export const useUniverse = () => {
 
       let animationId: number | null = null;
 
-      toggleLoop.value = () => {
+      togglePlay.value = () => {
         if (animationId) {
           cancelAnimationFrame(animationId);
           animationId = null;
-          isLooping.value = false;
+          isPlaying.value = false;
         } else {
           const render = () => {
             universe.tick();
             animationId = requestAnimationFrame(render);
           };
 
-          isLooping.value = true;
+          isPlaying.value = true;
           animationId = requestAnimationFrame(render);
         }
       };
@@ -63,7 +63,7 @@ export const useUniverse = () => {
     cellSize,
     toggleCell,
     reset,
-    toggleLoop,
-    isLooping,
+    togglePlay,
+    isPlaying,
   };
 };
