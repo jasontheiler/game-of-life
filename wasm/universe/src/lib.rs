@@ -147,6 +147,12 @@ impl Universe {
         self.draw_cell(row, col);
     }
 
+    pub fn reset(&mut self) {
+        self.cells = (0..self.rows * self.cols).map(|_| Cell::Dead).collect();
+
+        self.draw_cells();
+    }
+
     pub fn tick(&mut self) {
         let ctx = js::get_canvas_context_2d(&self.canvas);
 

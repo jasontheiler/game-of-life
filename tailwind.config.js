@@ -1,11 +1,9 @@
 const colors = require("tailwindcss/colors");
 const { fontFamily } = require("tailwindcss/defaultTheme");
 
+// Tailwind CSS configuration
+// See: https://tailwindcss.com/docs/configuration
 module.exports = {
-  /*
-   * Theme configuration
-   * See: https://tailwindcss.com/docs/theme
-   */
   theme: {
     extend: {
       colors: {

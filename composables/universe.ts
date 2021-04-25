@@ -6,6 +6,7 @@ export const useUniverse = () => {
   const canvasHeight = ref(0);
   const cellSize = ref(0);
   const toggleCell = ref((_event: MouseEvent) => {});
+  const reset = ref(() => {});
 
   const toggleLoop = ref(() => {});
   const isLooping = ref(false);
@@ -19,8 +20,8 @@ export const useUniverse = () => {
         canvasWidth.value,
         canvasHeight.value,
         cellSize.value,
-        "#fff4",
-        "#fffb"
+        "#00000040",
+        "#CBFAF0"
       );
 
       watchEffect(() =>
@@ -50,6 +51,8 @@ export const useUniverse = () => {
           animationId = requestAnimationFrame(render);
         }
       };
+
+      reset.value = () => universe.reset();
     }
   });
 
@@ -59,6 +62,7 @@ export const useUniverse = () => {
     canvasHeight,
     cellSize,
     toggleCell,
+    reset,
     toggleLoop,
     isLooping,
   };

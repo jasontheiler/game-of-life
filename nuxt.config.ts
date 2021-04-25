@@ -1,6 +1,6 @@
+import { resolve } from "path";
 import { NuxtConfig } from "@nuxt/types";
 import WasmPackPlugin from "@wasm-tool/wasm-pack-plugin";
-import { resolve } from "path";
 
 import { fixUrl } from "./utils";
 
@@ -9,65 +9,49 @@ const { BASE_URL } = process.env;
 const baseUrl = fixUrl(BASE_URL ?? "");
 
 const config: NuxtConfig = {
-  /*
-   * Dir configuration
-   * See: https://nuxtjs.org/guides/configuration-glossary/configuration-dir
-   */
+  // Dir configuration
+  // See: https://nuxtjs.org/guides/configuration-glossary/configuration-dir
   dir: {
     static: "public",
   },
 
-  /*
-   * Target configuration
-   * See: https://nuxtjs.org/guides/configuration-glossary/configuration-target
-   */
+  // Target configuration
+  // See: https://nuxtjs.org/guides/configuration-glossary/configuration-target
   target: "static",
 
-  /*
-   * Generate configuration
-   * See:
-   *   - https://nuxtjs.org/guides/configuration-glossary/configuration-generate/
-   *   - https://composition-api.nuxtjs.org/getting-started/setup#quick-start
-   */
+  // Generate configuration
+  // See:
+  //   - https://nuxtjs.org/guides/configuration-glossary/configuration-generate/
+  //   - https://composition-api.nuxtjs.org/getting-started/setup#quick-start
   generate: {
     interval: 2000,
   },
 
-  /*
-   * Public runtime configuration
-   * See: https://nuxtjs.org/guides/configuration-glossary/configuration-runtime-config/
-   */
+  // Public runtime configuration
+  // See: https://nuxtjs.org/guides/configuration-glossary/configuration-runtime-config/
   publicRuntimeConfig: {
     baseUrl,
   },
 
-  /*
-   * Global CSS
-   * See: https://nuxtjs.org/guides/configuration-glossary/configuration-css/
-   */
+  // Global CSS
+  // See: https://nuxtjs.org/guides/configuration-glossary/configuration-css/
   css: ["@fontsource/inter/latin.css"],
 
-  /*
-   * Plugins to load before mounting the app
-   * See: https://nuxtjs.org/guides/configuration-glossary/configuration-plugins/
-   */
+  // Plugins to load before mounting the app
+  // See: https://nuxtjs.org/guides/configuration-glossary/configuration-plugins/
   plugins: [{ src: "~/plugins/polyfills.ts", mode: "client" }],
 
-  /*
-   * Auto import components
-   * See: https://nuxtjs.org/guides/configuration-glossary/configuration-components/
-   */
+  // Auto import components
+  // See: https://nuxtjs.org/guides/configuration-glossary/configuration-components/
   components: true,
 
-  /*
-   * Build modules
-   * See:
-   *   - https://nuxtjs.org/guides/configuration-glossary/configuration-modules/
-   *   - https://typescript.nuxtjs.org/
-   *   - https://composition-api.nuxtjs.org/
-   *   - https://tailwindcss.nuxtjs.org/
-   *   - https://github.com/nuxt-community/fontawesome-module
-   */
+  // Build modules
+  // See:
+  //   - https://nuxtjs.org/guides/configuration-glossary/configuration-modules/
+  //   - https://typescript.nuxtjs.org/
+  //   - https://composition-api.nuxtjs.org/
+  //   - https://tailwindcss.nuxtjs.org/
+  //   - https://github.com/nuxt-community/fontawesome-module
   buildModules: [
     "@nuxt/typescript-build",
     "@nuxtjs/composition-api/module",
@@ -75,10 +59,8 @@ const config: NuxtConfig = {
     "@nuxtjs/fontawesome",
   ],
 
-  /*
-   * Build configuration
-   * See: https://nuxtjs.org/guides/configuration-glossary/configuration-build/
-   */
+  // Build configuration
+  // See: https://nuxtjs.org/guides/configuration-glossary/configuration-build/
   build: {
     plugins: [
       new WasmPackPlugin({
@@ -94,43 +76,43 @@ const config: NuxtConfig = {
     },
   },
 
-  /*
-   * Tailwind CSS configuration
-   * See: https://tailwindcss.nuxtjs.org/options
-   */
+  // Tailwind CSS configuration
+  // See: https://tailwindcss.nuxtjs.org/options
   tailwindcss: {
     jit: true,
   },
 
-  /*
-   * Font Awesome Icons configuration
-   * See: https://github.com/nuxt-community/fontawesome-module#module-options
-   */
+  // Font Awesome Icons configuration
+  // See: https://github.com/nuxt-community/fontawesome-module#module-options
   fontawesome: {
     icons: {
-      solid: ["faChevronUp", "faPlay", "faPause"],
+      solid: [
+        "faChevronUp",
+        "faUndoAlt",
+        "faPlay",
+        "faPause",
+        "faPenSquare",
+        "faPaintBrush",
+        "faEraser",
+      ],
     },
   },
 
-  /*
-   * Modules
-   * See:
-   *   - https://nuxtjs.org/guides/configuration-glossary/configuration-modules/
-   *   - https://pwa.nuxtjs.org/
-   *   - https://github.com/nuxt-community/robots-module/
-   */
+  // Modules
+  // See:
+  //   - https://nuxtjs.org/guides/configuration-glossary/configuration-modules/
+  //   - https://pwa.nuxtjs.org/
+  //   - https://github.com/nuxt-community/robots-module/
   modules: ["@nuxtjs/pwa", "@nuxtjs/robots"],
 
-  /*
-   * PWA configuration
-   * See: https://pwa.nuxtjs.org/setup/#configuration
-   */
+  // PWA configuration
+  // See: https://pwa.nuxtjs.org/setup/#configuration
   pwa: {
     manifest: {
       name: "Conway's Game of Life",
       short_name: "Game of Life",
       description: "Work in progress!",
-      background_color: "#000000",
+      background_color: "#0D9488",
     },
 
     meta: {
@@ -140,7 +122,7 @@ const config: NuxtConfig = {
       ogHost: baseUrl,
       ogImage: "/image.png",
       twitterCard: "summary_large_image",
-      theme_color: "#000000",
+      theme_color: "#0D9488",
     },
   },
 };

@@ -1,9 +1,9 @@
 {
-  "private": true,
   "name": "game-of-life",
+  "private": true,
   "license": "GPL-3.0",
   "scripts": {
-    "fmt": "prettier --write \"**/*.{vue,ts,js,json,css,md}\"",
+    "fmt": "prettier --write .",
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
