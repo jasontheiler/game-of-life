@@ -5,8 +5,8 @@ export const useUniverse = () => {
   const canvasWidth = ref(0);
   const canvasHeight = ref(0);
   const cellSize = ref(0);
-  const toggleCell = ref((_event: MouseEvent) => {});
-  const reset = ref(() => {});
+  const toggleCellAt = ref((_event: MouseEvent) => {});
+  const killCells = ref(() => {});
 
   const togglePlay = ref(() => {});
   const isPlaying = ref(false);
@@ -30,7 +30,7 @@ export const useUniverse = () => {
 
       watchEffect(() => universe.setCellSize(cellSize.value));
 
-      toggleCell.value = ({ offsetX, offsetY }) => {
+      toggleCellAt.value = ({ offsetX, offsetY }) => {
         universe.toggleCellAt(offsetX, offsetY);
       };
 
@@ -52,7 +52,7 @@ export const useUniverse = () => {
         }
       };
 
-      reset.value = () => universe.reset();
+      killCells.value = () => universe.killCells();
     }
   });
 
@@ -61,8 +61,8 @@ export const useUniverse = () => {
     canvasWidth,
     canvasHeight,
     cellSize,
-    toggleCell,
-    reset,
+    toggleCellAt,
+    killCells,
     togglePlay,
     isPlaying,
   };

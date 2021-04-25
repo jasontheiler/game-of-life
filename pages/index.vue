@@ -6,7 +6,7 @@
     >
       <section class="w-full h-full px-4 pt-4 overflow-hidden">
         <div ref="canvasWrapper" class="w-full h-full">
-          <canvas ref="canvas" class="cursor-pointer" @click="toggleCell" />
+          <canvas ref="canvas" class="cursor-pointer" @click="toggleCellAt" />
         </div>
       </section>
 
@@ -27,7 +27,7 @@
 
       <TheControls
         :isPlaying="isPlaying"
-        @reset="reset"
+        @reset="killCells"
         @togglePlay="togglePlay"
       />
     </aside>
@@ -47,8 +47,8 @@ export default defineComponent({
       canvasWidth,
       canvasHeight,
       cellSize,
-      toggleCell,
-      reset,
+      toggleCellAt,
+      killCells,
       togglePlay,
       isPlaying,
     } = useUniverse();
@@ -67,8 +67,8 @@ export default defineComponent({
     return {
       canvasWrapper,
       canvas,
-      toggleCell,
-      reset,
+      toggleCellAt,
+      killCells,
       togglePlay,
       isPlaying,
       isOpen,

@@ -122,11 +122,7 @@ impl Universe {
     ///
     /// ```ts
     /// const universe = new Universe(canvas, 512, 512, 16);
-    ///
     /// universe.toggleCellAt(128, 256);
-    ///
-    /// // You need to manually redraw the cells afterwards.
-    /// universe.drawCells("#000000");
     /// ```
     #[wasm_bindgen(js_name = toggleCellAt)]
     pub fn toggle_cell_at(&mut self, x: u32, y: u32) {
@@ -147,7 +143,16 @@ impl Universe {
         self.draw_cell(row, col);
     }
 
-    pub fn reset(&mut self) {
+    /// Kills all cells.
+    ///
+    /// # Examples
+    ///
+    /// ```ts
+    /// const universe = new Universe(canvas, 512, 512, 16);
+    /// universe.killCells();
+    /// ```
+    #[wasm_bindgen(js_name = killCells)]
+    pub fn kill_cells(&mut self) {
         self.cells = (0..self.rows * self.cols).map(|_| Cell::Dead).collect();
 
         self.draw_cells();
