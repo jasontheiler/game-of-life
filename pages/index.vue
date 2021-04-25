@@ -2,12 +2,12 @@
   <div class="w-full h-screen flex flex-col overflow-hidden">
     <main
       :class="{ '-translate-y-1/3 scale-75': isOpen }"
-      class="flex-1 w-full p-4 md:p-6 pb-0 md:pb-0 flex flex-col rounded-b-3xl bg-white bg-opacity-25 shadow-2xl transform-gpu transition-transform duration-500"
+      class="flex-1 w-full p-4 md:p-6 pb-0 md:pb-0 flex flex-col rounded-b-3xl border border-t-0 border-white border-opacity-25 bg-white bg-opacity-25 shadow-2xl transform-gpu transition-transform duration-500"
     >
       <canvas ref="canvas" class="w-full h-full" @click="toggleCell" />
 
       <button
-        class="w-full h-8 md:h-12 text-center text-xl text-black text-opacity-25"
+        class="w-full h-12 md:h-16 text-center text-xl text-black text-opacity-25"
         @click="isOpen = !isOpen"
       >
         <FontAwesomeIcon
@@ -19,7 +19,10 @@
     </main>
 
     <aside class="px-4 md:px-6 py-6 md:py-8 flex justify-center items-center">
-      <AppButtonRound class="text-2xl text-violet-300" @click="toggleLoop">
+      <AppButtonRound
+        class="text-2xl text-white text-opacity-75"
+        @click="toggleLoop"
+      >
         <FontAwesomeIcon v-if="isLooping" icon="pause" />
         <FontAwesomeIcon v-else icon="play" />
       </AppButtonRound>

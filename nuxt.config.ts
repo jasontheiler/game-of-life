@@ -103,8 +103,8 @@ const config: NuxtConfig = {
   },
 
   /*
-   *
-   *
+   * Font Awesome Icons configuration
+   * See: https://github.com/nuxt-community/fontawesome-module#module-options
    */
   fontawesome: {
     icons: {
