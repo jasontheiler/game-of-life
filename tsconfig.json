@@ -13,11 +13,7 @@
       "~/*": ["./*"],
       "@/*": ["./*"]
     },
-    "types": [
-      "@types/node",
-      "@nuxt/types",
-      "@nuxtjs/color-mode"
-    ]
+    "types": ["@types/node", "@nuxt/types"]
   },
   "exclude": ["./.nuxt", "./dist", "./node_modules"]
 }

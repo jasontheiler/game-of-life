@@ -65,14 +65,14 @@ const config: NuxtConfig = {
    *   - https://nuxtjs.org/guides/configuration-glossary/configuration-modules/
    *   - https://typescript.nuxtjs.org/
    *   - https://composition-api.nuxtjs.org/
-   *   - https://color-mode.nuxtjs.org/
    *   - https://tailwindcss.nuxtjs.org/
+   *   - https://github.com/nuxt-community/fontawesome-module
    */
   buildModules: [
     "@nuxt/typescript-build",
     "@nuxtjs/composition-api/module",
-    "@nuxtjs/color-mode",
     "@nuxtjs/tailwindcss",
+    "@nuxtjs/fontawesome",
   ],
 
   /*
@@ -95,19 +95,21 @@ const config: NuxtConfig = {
   },
 
   /*
-   * Color mode configuration
-   * See: https://color-mode.nuxtjs.org/#configuration
-   */
-  colorMode: {
-    classSuffix: "",
-  },
-
-  /*
    * Tailwind CSS configuration
    * See: https://tailwindcss.nuxtjs.org/options
    */
   tailwindcss: {
     jit: true,
+  },
+
+  /*
+   *
+   *
+   */
+  fontawesome: {
+    icons: {
+      solid: ["faChevronUp", "faPlay", "faPause"],
+    },
   },
 
   /*
