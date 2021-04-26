@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-screen flex flex-col-reverse overflow-hidden">
+  <div class="relative w-full h-screen flex flex-col-reverse overflow-hidden">
     <main
       :class="{ '-translate-y-1/3 scale-75': isOpen }"
       class="absolute inset-x-2 top-0 bottom-[7.5rem] flex flex-col rounded-b-2xl border border-t-0 border-white border-opacity-20 bg-white bg-opacity-20 backdrop-blur shadow-2xl transform-gpu transition-transform duration-500"
