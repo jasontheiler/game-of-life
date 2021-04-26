@@ -23,13 +23,19 @@
     </main>
 
     <aside class="w-full max-w-screen-md mx-auto px-6">
-      <TheSettings />
+      <section></section>
 
-      <TheControls
-        :isPlaying="isPlaying"
-        @reset="killCells"
-        @togglePlay="togglePlay"
-      />
+      <section class="w-full py-6 flex justify-around items-center">
+        <AppIconButton icon="undo-alt" @click="killCells" />
+
+        <AppIconButton
+          :icon="isPlaying ? 'pause' : 'play'"
+          size="lg"
+          @click="togglePlay"
+        />
+
+        <AppIconButton icon="pen-square" />
+      </section>
     </aside>
   </div>
 </template>
