@@ -143,16 +143,64 @@ impl Universe {
         self.draw_cell(row, col);
     }
 
+    /// Revives the cell at the specified `x` and `y` coordinates.
+    ///
+    /// # Examples
+    ///
+    /// ```ts
+    /// const universe = new Universe(canvas, 512, 512, 16);
+    /// universe.reviveCellAt(128, 256);
+    /// ```
+    #[wasm_bindgen(js_name = reviveCellAt)]
+    pub fn revive_cell_at(&mut self, x: u32, y: u32) {
+        let row = (y - self.offset_y) / (self.cell_size + GRID_LINE_WIDTH);
+        let col = (x - self.offset_x) / (self.cell_size + GRID_LINE_WIDTH);
+
+        if row >= self.rows || col >= self.cols {
+            return;
+        }
+
+        let idx = self.get_index(row, col);
+
+        self.cells[idx] = Cell::Alive;
+
+        self.draw_cell(row, col);
+    }
+
+    /// Kills the cell at the specified `x` and `y` coordinates.
+    ///
+    /// # Examples
+    ///
+    /// ```ts
+    /// const universe = new Universe(canvas, 512, 512, 16);
+    /// universe.killCellAt(128, 256);
+    /// ```
+    #[wasm_bindgen(js_name = killCellAt)]
+    pub fn kill_cell_at(&mut self, x: u32, y: u32) {
+        let row = (y - self.offset_y) / (self.cell_size + GRID_LINE_WIDTH);
+        let col = (x - self.offset_x) / (self.cell_size + GRID_LINE_WIDTH);
+
+        if row >= self.rows || col >= self.cols {
+            return;
+        }
+
+        let idx = self.get_index(row, col);
+
+        self.cells[idx] = Cell::Dead;
+
+        self.draw_cell(row, col);
+    }
+
     /// Kills all cells.
     ///
     /// # Examples
     ///
     /// ```ts
     /// const universe = new Universe(canvas, 512, 512, 16);
-    /// universe.killCells();
+    /// universe.killAllCells();
     /// ```
-    #[wasm_bindgen(js_name = killCells)]
-    pub fn kill_cells(&mut self) {
+    #[wasm_bindgen(js_name = killAllCells)]
+    pub fn kill_all_cells(&mut self) {
         self.cells = (0..self.rows * self.cols).map(|_| Cell::Dead).collect();
 
         self.draw_cells();
@@ -169,7 +217,7 @@ impl Universe {
             for col in 0..self.cols {
                 let idx = self.get_index(row, col);
                 let cell = self.cells[idx];
-                let live_neighbors = self.live_neighbor_count(row, col);
+                let live_neighbors = self.live_neighbors(row, col);
 
                 next_cells[idx] = match (cell, live_neighbors) {
                     (Cell::Alive, x) if x > 3 || x < 2 => {
@@ -200,7 +248,7 @@ impl Universe {
         self.cells = next_cells;
     }
 
-    fn live_neighbor_count(&self, row: u32, col: u32) -> u8 {
+    fn live_neighbors(&self, row: u32, col: u32) -> u8 {
         let mut count = 0;
 
         let north = if row == 0 { self.rows - 1 } else { row - 1 };

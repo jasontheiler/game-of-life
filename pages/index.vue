@@ -6,7 +6,7 @@
     >
       <section class="w-full h-full px-4 pt-4 overflow-hidden">
         <div ref="canvasWrapper" class="w-full h-full">
-          <canvas ref="canvas" class="cursor-pointer" @click="toggleCellAt" />
+          <canvas ref="canvas" class="cursor-pointer" @click="onCanvasClick" />
         </div>
       </section>
 
@@ -26,7 +26,7 @@
       <section></section>
 
       <section class="w-full py-6 flex justify-around items-center">
-        <AppIconButton icon="undo-alt" @click="killCells" />
+        <AppIconButton icon="undo-alt" @click="killAllCells" />
 
         <AppIconButton
           :icon="isPlaying ? 'pause' : 'play'"
@@ -34,7 +34,10 @@
           @click="togglePlay"
         />
 
-        <AppIconButton icon="pen-square" />
+        <AppIconSelect
+          v-model="selectedCanvasInteraction"
+          :options="canvasInteractionMethods"
+        />
       </section>
     </aside>
   </div>
@@ -54,7 +57,9 @@ export default defineComponent({
       canvasHeight,
       cellSize,
       toggleCellAt,
-      killCells,
+      reviveCellAt,
+      killCellAt,
+      killAllCells,
       togglePlay,
       isPlaying,
     } = useUniverse();
@@ -68,15 +73,39 @@ export default defineComponent({
 
     cellSize.value = 16;
 
+    const canvasInteractionMethods = [
+      { value: "toggle", icon: "pen-square" },
+      { value: "draw", icon: "paint-brush" },
+      { value: "erase", icon: "eraser" },
+    ];
+    const selectedCanvasInteraction = ref(canvasInteractionMethods[0]);
+
+    const onCanvasClick = (event: MouseEvent) => {
+      switch (selectedCanvasInteraction.value.value) {
+        case "erase":
+          killCellAt.value(event);
+          break;
+        case "draw":
+          reviveCellAt.value(event);
+          break;
+        case "toggle":
+        default:
+          toggleCellAt.value(event);
+          break;
+      }
+    };
+
     const isOpen = ref(false);
 
     return {
       canvasWrapper,
       canvas,
-      toggleCellAt,
-      killCells,
+      onCanvasClick,
+      killAllCells,
       togglePlay,
       isPlaying,
+      canvasInteractionMethods,
+      selectedCanvasInteraction,
       isOpen,
     };
   },

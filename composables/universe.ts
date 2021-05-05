@@ -6,7 +6,9 @@ export const useUniverse = () => {
   const canvasHeight = ref(0);
   const cellSize = ref(0);
   const toggleCellAt = ref((_event: MouseEvent) => {});
-  const killCells = ref(() => {});
+  const reviveCellAt = ref((_event: MouseEvent) => {});
+  const killCellAt = ref((_event: MouseEvent) => {});
+  const killAllCells = ref(() => {});
 
   const togglePlay = ref(() => {});
   const isPlaying = ref(false);
@@ -34,6 +36,16 @@ export const useUniverse = () => {
         universe.toggleCellAt(offsetX, offsetY);
       };
 
+      reviveCellAt.value = ({ offsetX, offsetY }) => {
+        universe.reviveCellAt(offsetX, offsetY);
+      };
+
+      killCellAt.value = ({ offsetX, offsetY }) => {
+        universe.killCellAt(offsetX, offsetY);
+      };
+
+      killAllCells.value = () => universe.killAllCells();
+
       let animationId: number | null = null;
 
       togglePlay.value = () => {
@@ -51,8 +63,6 @@ export const useUniverse = () => {
           animationId = requestAnimationFrame(render);
         }
       };
-
-      killCells.value = () => universe.killCells();
     }
   });
 
@@ -62,7 +72,9 @@ export const useUniverse = () => {
     canvasHeight,
     cellSize,
     toggleCellAt,
-    killCells,
+    reviveCellAt,
+    killCellAt,
+    killAllCells,
     togglePlay,
     isPlaying,
   };
