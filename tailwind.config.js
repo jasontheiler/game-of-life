@@ -4,6 +4,8 @@ const { fontFamily } = require("tailwindcss/defaultTheme");
 // Tailwind CSS configuration
 // See: https://tailwindcss.com/docs/configuration
 module.exports = {
+  mode: "jit",
+
   theme: {
     extend: {
       colors: {

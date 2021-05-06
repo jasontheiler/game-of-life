@@ -89,12 +89,6 @@ const config: NuxtConfig = {
     },
   },
 
-  // Tailwind CSS configuration
-  // See: https://tailwindcss.nuxtjs.org/options
-  tailwindcss: {
-    jit: true,
-  },
-
   // Font Awesome Icons configuration
   // See: https://github.com/nuxt-community/fontawesome-module#module-options
   fontawesome: {
