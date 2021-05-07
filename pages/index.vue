@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full h-screen flex flex-col-reverse overflow-hidden">
+  <div class="relative w-full h-[150vh] flex flex-col-reverse overflow-hidden">
     <main
       :class="{ '-translate-y-1/3 scale-75': isOpen }"
       class="absolute inset-x-2 top-0 bottom-[7.5rem] flex flex-col rounded-b-2xl border border-t-0 border-white border-opacity-20 bg-white bg-opacity-20 backdrop-filter backdrop-blur-md shadow-2xl transform-gpu transition-transform duration-500"
@@ -11,7 +11,7 @@
       </section>
 
       <button
-        class="w-full h-12 rounded-2xl text-center text-xl text-black text-opacity-20 hover:text-opacity-30 focus-visible:outline-none focus-visible:ring focus-visible:ring-teal-100 transition duration-150"
+        class="w-full h-12 rounded-2xl text-center text-xl text-black text-opacity-20 hover:text-opacity-30 focus-visible:outline-none focus-visible:ring focus-visible:ring-teal-100 transition-shadow duration-100"
         @click="isOpen = !isOpen"
       >
         <FontAwesomeIcon
@@ -75,9 +75,9 @@ export default defineComponent({
     cellSize.value = 16;
 
     const canvasInteractionMethods = [
-      { value: "toggle", icon: "pen-square" },
-      { value: "draw", icon: "paint-brush" },
-      { value: "erase", icon: "eraser" },
+      { icon: "pen-square", value: "toggle" },
+      { icon: "paint-brush", value: "draw" },
+      { icon: "eraser", value: "erase" },
     ];
     const selectedCanvasInteraction = ref(canvasInteractionMethods[0]);
 

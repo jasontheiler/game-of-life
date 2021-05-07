@@ -2,11 +2,11 @@ import { resolve } from "path";
 import { NuxtConfig } from "@nuxt/types";
 import WasmPackPlugin from "@wasm-tool/wasm-pack-plugin";
 
-import { fixUrl } from "./utils";
+import { normalizeUrl } from "./utils";
 
 // Reads environment variables.
 const { BASE_URL } = process.env;
-const baseUrl = fixUrl(BASE_URL ?? "");
+const baseUrl = normalizeUrl(BASE_URL ?? "");
 
 const config: NuxtConfig = {
   // Dir configuration

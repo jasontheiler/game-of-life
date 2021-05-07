@@ -1,1 +1,1 @@
-export * from "./fixUrl";
+export * from "./normalizeUrl";
