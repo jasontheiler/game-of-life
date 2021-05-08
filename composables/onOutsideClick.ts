@@ -6,14 +6,20 @@ import {
 } from "@vue/composition-api";
 
 /**
- * Listens to click events outside of the specified element.
+ * Listens to click events outside of the specified elements.
  */
 export const useOnOutsideClick = (
   element: Ref<Element | null>,
-  onOutsideClick: (event: MouseEvent | TouchEvent) => void
+  onOutsideClick: (event: MouseEvent | TouchEvent) => void,
+  ignoredElements: Ref<Element | null>[] = []
 ) => {
   const onClick = (event: MouseEvent | TouchEvent) => {
-    if (!element.value?.contains(event.target as Node)) onOutsideClick(event);
+    if (
+      [element, ...ignoredElements].every(
+        (element) => !element.value?.contains(event.target as Node)
+      )
+    )
+      onOutsideClick(event);
   };
 
   onMounted(() =>

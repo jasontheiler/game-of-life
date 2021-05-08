@@ -1,23 +1,23 @@
 <template>
-  <div class="relative">
+  <div ref="rootElement" class="relative">
     <AppIconButton :icon="value.icon" :size="size" @click="isOpen = !isOpen" />
 
     <Transition
       enter-active-class="transition duration-100"
       enter-class="transform scale-95 opacity-0"
       enter-to-class="transform scale-100 opacity-100"
-      leave-active-class="transition duration-75"
+      leave-active-class="transition duration-100"
       leave-class="transform opacity-100 scale-100"
       leave-to-class="transform scale-95 opacity-0"
     >
       <ul
         v-if="isOpen"
-        ref="menuElement"
+        ref="optionsElement"
         :class="{
-          'left-0 bottom-[125%] flex-col': direction === 'up',
-          'left-[125%] top-0': direction === 'right',
-          'left-0 top-[125%] flex-col': direction === 'down',
-          'right-[125%] top-0': direction === 'left',
+          'left-0 bottom-[125%] flex-col origin-bottom': direction === 'up',
+          'left-[125%] top-0 origin-left': direction === 'right',
+          'left-0 top-[125%] flex-col origin-top': direction === 'down',
+          'right-[125%] top-0 origin-right': direction === 'left',
         }"
         class="absolute rounded-xl flex items-center border border-white border-opacity-10 bg-black bg-opacity-20 backdrop-filter backdrop-blur-md shadow-lg"
       >
@@ -79,10 +79,13 @@ export default defineComponent({
   },
 
   setup(_props, { emit }) {
-    const menuElement = ref<HTMLUListElement | null>(null);
+    const rootElement = ref<HTMLDivElement | null>(null);
+    const optionsElement = ref<HTMLUListElement | null>(null);
     const isOpen = ref(false);
 
-    useOnOutsideClick(menuElement, () => (isOpen.value = false));
+    useOnOutsideClick(optionsElement, () => (isOpen.value = false), [
+      rootElement,
+    ]);
 
     const setValue = (option: Option) => {
       isOpen.value = false;
@@ -90,7 +93,8 @@ export default defineComponent({
     };
 
     return {
-      menuElement,
+      rootElement,
+      optionsElement,
       isOpen,
       setValue,
     };
