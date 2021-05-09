@@ -1,12 +1,12 @@
 <template>
-  <div class="relative w-full h-[150vh] flex flex-col-reverse overflow-hidden">
+  <div class="relative w-full h-screen flex flex-col-reverse overflow-hidden">
     <main
       :class="{ '-translate-y-1/3 scale-75': isOpen }"
       class="absolute inset-x-2 top-0 bottom-[7.5rem] flex flex-col rounded-b-2xl border border-t-0 border-white border-opacity-20 bg-white bg-opacity-20 backdrop-filter backdrop-blur-md shadow-2xl transform-gpu transition-transform duration-500"
     >
       <section class="w-full h-full px-4 pt-4 overflow-hidden">
-        <div ref="canvasWrapper" class="w-full h-full">
-          <canvas ref="canvas" class="cursor-pointer" @click="onCanvasClick" />
+        <div ref="canvasWrapperElement" class="w-full h-full">
+          <canvas ref="canvasElement" class="cursor-pointer" />
         </div>
       </section>
 
@@ -26,7 +26,7 @@
       <section></section>
 
       <section class="w-full py-6 flex justify-around items-center">
-        <AppIconButton icon="undo-alt" @click="killAllCells" />
+        <AppIconButton icon="undo-alt" @click="reset" />
 
         <AppIconButton
           :icon="isPlaying ? 'pause' : 'play'"
@@ -35,8 +35,8 @@
         />
 
         <AppIconSelect
-          v-model="selectedCanvasInteraction"
-          :options="canvasInteractionMethods"
+          v-model="interactionMethodOption"
+          :options="interactionMethodOptions"
           direction="up"
         />
       </section>
@@ -45,68 +45,60 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "@nuxtjs/composition-api";
+import { defineComponent, ref, watchEffect } from "@nuxtjs/composition-api";
 
-import { useUniverse, useOnResize } from "~/composables";
+import {
+  UniverseInteractionMethod,
+  useUniverse,
+  useOnResize,
+} from "~/composables";
 
 export default defineComponent({
   setup() {
-    const canvasWrapper = ref<HTMLDivElement | null>(null);
+    const canvasWrapperElement = ref<HTMLDivElement | null>(null);
     const {
-      canvas,
+      canvasElement,
       canvasWidth,
       canvasHeight,
       cellSize,
-      toggleCellAt,
-      reviveCellAt,
-      killCellAt,
-      killAllCells,
+      reset,
       togglePlay,
       isPlaying,
+      interactionMethod,
     } = useUniverse();
 
     useOnResize(() => {
-      if (canvasWrapper.value) {
-        canvasWidth.value = canvasWrapper.value?.clientWidth;
-        canvasHeight.value = canvasWrapper.value?.clientHeight;
+      if (canvasWrapperElement.value) {
+        canvasWidth.value = canvasWrapperElement.value?.clientWidth;
+        canvasHeight.value = canvasWrapperElement.value?.clientHeight;
       }
     }, true);
 
     cellSize.value = 16;
 
-    const canvasInteractionMethods = [
+    const interactionMethodOptions = [
       { icon: "pen-square", value: "toggle" },
       { icon: "paint-brush", value: "draw" },
       { icon: "eraser", value: "erase" },
     ];
-    const selectedCanvasInteraction = ref(canvasInteractionMethods[0]);
+    const interactionMethodOption = ref(interactionMethodOptions[0]);
 
-    const onCanvasClick = (event: MouseEvent) => {
-      switch (selectedCanvasInteraction.value.value) {
-        case "erase":
-          killCellAt.value(event);
-          break;
-        case "draw":
-          reviveCellAt.value(event);
-          break;
-        case "toggle":
-        default:
-          toggleCellAt.value(event);
-          break;
-      }
-    };
+    watchEffect(
+      () =>
+        (interactionMethod.value = interactionMethodOption.value
+          .value as UniverseInteractionMethod)
+    );
 
     const isOpen = ref(false);
 
     return {
-      canvasWrapper,
-      canvas,
-      onCanvasClick,
-      killAllCells,
+      canvasWrapperElement,
+      canvasElement,
+      reset,
       togglePlay,
       isPlaying,
-      canvasInteractionMethods,
-      selectedCanvasInteraction,
+      interactionMethodOptions,
+      interactionMethodOption,
       isOpen,
     };
   },
