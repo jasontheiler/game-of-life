@@ -6,7 +6,32 @@
     >
       <section class="w-full h-full px-4 pt-4 overflow-hidden">
         <div ref="canvasWrapperElement" class="w-full h-full">
-          <canvas ref="canvasElement" class="cursor-pointer" />
+          <canvas
+            ref="canvasElement"
+            class="cursor-pointer"
+            @touchstart.prevent="toMouseEvent('mousedown', $event.touches[0])"
+            @touchmove.prevent="toMouseEvent('mousemove', $event.touches[0])"
+            @touchcancel.prevent="toMouseEvent('mouseout', $event.touches[0])"
+            @touchend.prevent="toMouseEvent('mouseup', $event.touches[0])"
+            @mousedown.left="
+              isPrimary = true;
+              isSecondary = false;
+              onInteraction($event);
+            "
+            @mousedown.right="
+              isSecondary = true;
+              isPrimary = false;
+              onInteraction($event);
+            "
+            @mousemove="onInteraction"
+            @mouseout="
+              isPrimary = false;
+              isSecondary = false;
+            "
+            @mouseup.left="isPrimary = false"
+            @mouseup.right="isSecondary = false"
+            @contextmenu.prevent
+          />
         </div>
       </section>
 
@@ -26,18 +51,18 @@
       <section></section>
 
       <section class="w-full py-6 flex justify-around items-center">
-        <AppIconButton icon="undo-alt" @click="reset" />
+        <AppIconButton
+          icon="undo-alt"
+          @click="
+            pause();
+            killAllCells();
+          "
+        />
 
         <AppIconButton
           :icon="isPlaying ? 'pause' : 'play'"
           size="lg"
-          @click="togglePlay"
-        />
-
-        <AppIconSelect
-          v-model="interactionMethodOption"
-          :options="interactionMethodOptions"
-          direction="up"
+          @click="isPlaying ? pause() : play()"
         />
       </section>
     </aside>
@@ -45,26 +70,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watchEffect } from "@nuxtjs/composition-api";
+import { defineComponent, ref } from "@nuxtjs/composition-api";
 
-import {
-  UniverseInteractionMethod,
-  useUniverse,
-  useOnResize,
-} from "~/composables";
+import { useOnResize, useUniverse } from "~/composables";
 
 export default defineComponent({
   setup() {
+    const isOpen = ref(false);
+
     const canvasWrapperElement = ref<HTMLDivElement | null>(null);
     const {
       canvasElement,
       canvasWidth,
       canvasHeight,
       cellSize,
-      reset,
-      togglePlay,
+      killAllCells,
+      reviveCellAt,
+      killCellAt,
       isPlaying,
-      interactionMethod,
+      play,
+      pause,
     } = useUniverse();
 
     useOnResize(() => {
@@ -76,30 +101,29 @@ export default defineComponent({
 
     cellSize.value = 16;
 
-    const interactionMethodOptions = [
-      { icon: "pen-square", value: "toggle" },
-      { icon: "paint-brush", value: "draw" },
-      { icon: "eraser", value: "erase" },
-    ];
-    const interactionMethodOption = ref(interactionMethodOptions[0]);
+    const isPrimary = ref(false);
+    const isSecondary = ref(false);
 
-    watchEffect(
-      () =>
-        (interactionMethod.value = interactionMethodOption.value
-          .value as UniverseInteractionMethod)
-    );
+    const onInteraction = ({ offsetX, offsetY }: MouseEvent) => {
+      if (isPrimary.value) reviveCellAt.value(offsetX, offsetY);
+      if (isSecondary.value) killCellAt.value(offsetX, offsetY);
+    };
 
-    const isOpen = ref(false);
+    const toMouseEvent = (type: string, event: TouchEvent) =>
+      canvasElement.value?.dispatchEvent(new MouseEvent(type, event));
 
     return {
+      isOpen,
       canvasWrapperElement,
       canvasElement,
-      reset,
-      togglePlay,
+      killAllCells,
       isPlaying,
-      interactionMethodOptions,
-      interactionMethodOption,
-      isOpen,
+      play,
+      pause,
+      isPrimary,
+      isSecondary,
+      onInteraction,
+      toMouseEvent,
     };
   },
 });

@@ -116,33 +116,6 @@ impl Universe {
         self.draw_cells();
     }
 
-    /// Toggles the cell at the specified `x` and `y` coordinates.
-    ///
-    /// # Examples
-    ///
-    /// ```ts
-    /// const universe = new Universe(canvas, 512, 512, 16);
-    /// universe.toggleCellAt(128, 256);
-    /// ```
-    #[wasm_bindgen(js_name = toggleCellAt)]
-    pub fn toggle_cell_at(&mut self, x: u32, y: u32) {
-        let row = (y - self.offset_y) / (self.cell_size + GRID_LINE_WIDTH);
-        let col = (x - self.offset_x) / (self.cell_size + GRID_LINE_WIDTH);
-
-        if row >= self.rows || col >= self.cols {
-            return;
-        }
-
-        let idx = self.get_index(row, col);
-
-        self.cells[idx] = match self.cells[idx] {
-            Cell::Alive => Cell::Dead,
-            Cell::Dead => Cell::Alive,
-        };
-
-        self.draw_cell(row, col);
-    }
-
     /// Revives the cell at the specified `x` and `y` coordinates.
     ///
     /// # Examples

@@ -98,7 +98,6 @@ const config: NuxtConfig = {
         "faUndoAlt",
         "faPlay",
         "faPause",
-        "faPenSquare",
         "faPaintBrush",
         "faEraser",
       ],
