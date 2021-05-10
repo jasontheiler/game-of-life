@@ -9,25 +9,20 @@
           <canvas
             ref="canvasElement"
             class="cursor-pointer"
-            @touchstart.prevent="toMouseEvent('mousedown', $event.touches[0])"
-            @touchmove.prevent="toMouseEvent('mousemove', $event.touches[0])"
-            @touchcancel.prevent="toMouseEvent('mouseout', $event.touches[0])"
-            @touchend.prevent="toMouseEvent('mouseup', $event.touches[0])"
+            @touchstart.prevent="
+              (isPrimary = true), onPrimary($event.touches[0])
+            "
+            @touchmove.prevent="onPrimary($event.touches[0])"
+            @touchcancel.prevent="isPrimary = false"
+            @touchend.prevent="isPrimary = false"
             @mousedown.left="
-              isPrimary = true;
-              isSecondary = false;
-              onInteraction($event);
+              (isPrimary = true), (isSecondary = false), onPrimary($event)
             "
             @mousedown.right="
-              isSecondary = true;
-              isPrimary = false;
-              onInteraction($event);
+              (isSecondary = true), (isPrimary = false), onSecondary($event)
             "
-            @mousemove="onInteraction"
-            @mouseout="
-              isPrimary = false;
-              isSecondary = false;
-            "
+            @mousemove="onPrimary($event), onSecondary($event)"
+            @mouseout="(isPrimary = false), (isSecondary = false)"
             @mouseup.left="isPrimary = false"
             @mouseup.right="isSecondary = false"
             @contextmenu.prevent
@@ -64,6 +59,8 @@
           size="lg"
           @click="isPlaying ? pause() : play()"
         />
+
+        <TheAssignmentSwitch v-model="isSwitched" />
       </section>
     </aside>
   </div>
@@ -72,6 +69,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "@nuxtjs/composition-api";
 
+import { ClientCoordinates, getRelativeCoordinates } from "~/utils";
 import { useOnResize, useUniverse } from "~/composables";
 
 export default defineComponent({
@@ -103,14 +101,31 @@ export default defineComponent({
 
     const isPrimary = ref(false);
     const isSecondary = ref(false);
+    const isSwitched = ref(false);
+    const onPrimary = (clientCoordinates: ClientCoordinates) => {
+      if (isPrimary.value && canvasElement.value) {
+        const { relativeX, relativeY } = getRelativeCoordinates(
+          canvasElement.value,
+          clientCoordinates
+        );
 
-    const onInteraction = ({ offsetX, offsetY }: MouseEvent) => {
-      if (isPrimary.value) reviveCellAt.value(offsetX, offsetY);
-      if (isSecondary.value) killCellAt.value(offsetX, offsetY);
+        isSwitched.value
+          ? killCellAt.value(relativeX, relativeY)
+          : reviveCellAt.value(relativeX, relativeY);
+      }
     };
+    const onSecondary = (clientCoordinates: ClientCoordinates) => {
+      if (isSecondary.value && canvasElement.value) {
+        const { relativeX, relativeY } = getRelativeCoordinates(
+          canvasElement.value,
+          clientCoordinates
+        );
 
-    const toMouseEvent = (type: string, event: TouchEvent) =>
-      canvasElement.value?.dispatchEvent(new MouseEvent(type, event));
+        isSwitched.value
+          ? reviveCellAt.value(relativeX, relativeY)
+          : killCellAt.value(relativeX, relativeY);
+      }
+    };
 
     return {
       isOpen,
@@ -122,8 +137,9 @@ export default defineComponent({
       pause,
       isPrimary,
       isSecondary,
-      onInteraction,
-      toMouseEvent,
+      isSwitched,
+      onPrimary,
+      onSecondary,
     };
   },
 });
