@@ -19,10 +19,10 @@ export const getRelativeCoordinates = (
 
   const relativeX =
     (clientX - boundingClientRect.left) *
-    (boundingClientRect.width / element.clientWidth);
+    (element.clientWidth / boundingClientRect.width);
   const relativeY =
     (clientY - boundingClientRect.top) *
-    (boundingClientRect.height / element.clientHeight);
+    (element.clientHeight / boundingClientRect.height);
 
   return {
     relativeX,
