@@ -10,21 +10,25 @@
             ref="canvasElement"
             class="cursor-pointer"
             @touchstart.prevent="
-              (isPrimary = true), onPrimary($event.touches[0])
+              (isPrimaryActive = true), onPrimaryTool($event.touches[0])
             "
-            @touchmove.prevent="onPrimary($event.touches[0])"
-            @touchcancel.prevent="isPrimary = false"
-            @touchend.prevent="isPrimary = false"
+            @touchmove.prevent="onPrimaryTool($event.touches[0])"
+            @touchcancel.prevent="isPrimaryActive = false"
+            @touchend.prevent="isPrimaryActive = false"
             @mousedown.left="
-              (isPrimary = true), (isSecondary = false), onPrimary($event)
+              (isPrimaryActive = true),
+                (isSecondaryActive = false),
+                onPrimaryTool($event)
             "
             @mousedown.right="
-              (isSecondary = true), (isPrimary = false), onSecondary($event)
+              (isSecondaryActive = true),
+                (isPrimaryActive = false),
+                onSecondaryTool($event)
             "
-            @mousemove="onPrimary($event), onSecondary($event)"
-            @mouseout="(isPrimary = false), (isSecondary = false)"
-            @mouseup.left="isPrimary = false"
-            @mouseup.right="isSecondary = false"
+            @mousemove="onPrimaryTool($event), onSecondaryTool($event)"
+            @mouseout="(isPrimaryActive = false), (isSecondaryActive = false)"
+            @mouseup.left="isPrimaryActive = false"
+            @mouseup.right="isSecondaryActive = false"
             @contextmenu.prevent
           />
         </div>
@@ -46,13 +50,7 @@
       <section></section>
 
       <section class="w-full py-6 flex justify-around items-center">
-        <AppIconButton
-          icon="undo-alt"
-          @click="
-            pause();
-            killAllCells();
-          "
-        />
+        <AppIconButton icon="undo-alt" @click="pause(), killAllCells()" />
 
         <AppIconButton
           :icon="isPlaying ? 'pause' : 'play'"
@@ -60,7 +58,7 @@
           @click="isPlaying ? pause() : play()"
         />
 
-        <TheAssignmentSwitch v-model="isSwitched" />
+        <TheToolSwitch v-model="areToolsSwitched" />
       </section>
     </aside>
   </div>
@@ -99,29 +97,31 @@ export default defineComponent({
 
     cellSize.value = 16;
 
-    const isPrimary = ref(false);
-    const isSecondary = ref(false);
-    const isSwitched = ref(false);
-    const onPrimary = (clientCoordinates: ClientCoordinates) => {
-      if (isPrimary.value && canvasElement.value) {
+    const areToolsSwitched = ref(false);
+
+    const isPrimaryActive = ref(false);
+    const onPrimaryTool = (clientCoordinates: ClientCoordinates) => {
+      if (isPrimaryActive.value && canvasElement.value) {
         const { relativeX, relativeY } = getRelativeCoordinates(
           canvasElement.value,
           clientCoordinates
         );
 
-        isSwitched.value
+        areToolsSwitched.value
           ? killCellAt.value(relativeX, relativeY)
           : reviveCellAt.value(relativeX, relativeY);
       }
     };
-    const onSecondary = (clientCoordinates: ClientCoordinates) => {
-      if (isSecondary.value && canvasElement.value) {
+
+    const isSecondaryActive = ref(false);
+    const onSecondaryTool = (clientCoordinates: ClientCoordinates) => {
+      if (isSecondaryActive.value && canvasElement.value) {
         const { relativeX, relativeY } = getRelativeCoordinates(
           canvasElement.value,
           clientCoordinates
         );
 
-        isSwitched.value
+        areToolsSwitched.value
           ? reviveCellAt.value(relativeX, relativeY)
           : killCellAt.value(relativeX, relativeY);
       }
@@ -135,11 +135,11 @@ export default defineComponent({
       isPlaying,
       play,
       pause,
-      isPrimary,
-      isSecondary,
-      isSwitched,
-      onPrimary,
-      onSecondary,
+      areToolsSwitched,
+      isPrimaryActive,
+      onPrimaryTool,
+      isSecondaryActive,
+      onSecondaryTool,
     };
   },
 });

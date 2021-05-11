@@ -6,7 +6,7 @@ mod utils;
 use wasm_bindgen::prelude::*;
 use web_sys::HtmlCanvasElement;
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Cell {
     Dead = 0,
     Alive = 1,
