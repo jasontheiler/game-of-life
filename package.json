@@ -15,7 +15,7 @@
     "nuxt": "^2.15.4"
   },
   "devDependencies": {
-    "@fontsource/inter": "^4.2.2",
+    "@fontsource/poppins": "^4.3.0",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@nuxt/types": "^2.15.4",
     "@nuxt/typescript-build": "^2.1.0",

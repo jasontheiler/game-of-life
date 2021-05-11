@@ -5,7 +5,7 @@
       'w-12 h-12 text-xl': size === 'md',
       'w-18 h-18 text-3xl': size === 'lg',
     }"
-    class="rounded-full border border-white border-opacity-20 bg-black bg-opacity-20 hover:bg-opacity-30 backdrop-filter backdrop-blur-md shadow-md text-teal-100 focus-visible:outline-none focus-visible:ring focus-visible:ring-teal-100 transition-shadow duration-100"
+    class="rounded-full border border-white border-opacity-20 bg-black bg-opacity-20 hover:bg-opacity-30 backdrop-filter backdrop-blur shadow-md text-teal-100 focus-visible:outline-none focus-visible:ring focus-visible:ring-teal-100 transition-shadow duration-100"
     v-on="$listeners"
   >
     <FontAwesomeIcon :icon="icon" />

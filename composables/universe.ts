@@ -4,7 +4,7 @@ export const useUniverse = () => {
   const canvasElement = ref<HTMLCanvasElement | null>(null);
   const canvasWidth = ref(0);
   const canvasHeight = ref(0);
-  const cellSize = ref(0);
+  const cellSize = ref(16);
   const killAllCells = ref(() => {});
   const reviveCellAt = ref((_x: number, _y: number) => {});
   const killCellAt = ref((_x: number, _y: number) => {});
@@ -37,25 +37,25 @@ export const useUniverse = () => {
   });
 
   const isPlaying = ref(false);
-  let animationId: number | null = null;
+  let frameId: number | null = null;
 
   const play = () => {
-    if (!animationId) {
+    if (!frameId) {
       const render = () => {
         tick.value();
-        animationId = requestAnimationFrame(render);
+        frameId = requestAnimationFrame(render);
       };
 
       isPlaying.value = true;
-      animationId = requestAnimationFrame(render);
+      frameId = requestAnimationFrame(render);
     }
   };
 
   const pause = () => {
-    if (animationId) {
-      cancelAnimationFrame(animationId);
+    if (frameId) {
+      cancelAnimationFrame(frameId);
       isPlaying.value = false;
-      animationId = null;
+      frameId = null;
     }
   };
 

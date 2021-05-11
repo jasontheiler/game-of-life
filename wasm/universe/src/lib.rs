@@ -88,6 +88,7 @@ impl Universe {
         self.offset_x = (width % (self.cell_size + GRID_LINE_WIDTH)) / 2;
         self.offset_y = (height % (self.cell_size + GRID_LINE_WIDTH)) / 2;
 
+        self.clear_canvas();
         self.draw_grid();
         self.draw_cells();
     }
@@ -112,6 +113,7 @@ impl Universe {
         self.offset_x = (self.canvas.width() % (size + GRID_LINE_WIDTH)) / 2;
         self.offset_y = (self.canvas.height() % (size + GRID_LINE_WIDTH)) / 2;
 
+        self.clear_canvas();
         self.draw_grid();
         self.draw_cells();
     }
@@ -239,6 +241,17 @@ impl Universe {
         count += self.cells[self.get_index(south, east)] as u8;
 
         count
+    }
+
+    fn clear_canvas(&self) {
+        let ctx = js::get_canvas_context_2d(&self.canvas);
+
+        ctx.clear_rect(
+            0.0,
+            0.0,
+            self.canvas.width() as f64,
+            self.canvas.height() as f64,
+        );
     }
 
     fn draw_grid(&self) {

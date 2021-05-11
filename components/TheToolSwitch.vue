@@ -12,7 +12,7 @@
       class="absolute -left-1 -top-1 transform-gpu transition-transform duration-200"
     >
       <div
-        class="w-full h-full flex justify-center items-center rounded-full border border-white border-opacity-20 bg-black bg-opacity-20 group-hover:bg-opacity-30 backdrop-filter backdrop-blur-md shadow-md text-teal-100 group-focus-visible:ring group-focus-visible:ring-teal-100 transition-shadow duration-100"
+        class="w-full h-full flex justify-center items-center rounded-full border border-white border-opacity-20 bg-black bg-opacity-20 group-hover:bg-opacity-30 backdrop-filter backdrop-blur shadow-md text-teal-100 group-focus-visible:ring group-focus-visible:ring-teal-100 transition-shadow duration-100"
       >
         <FontAwesomeIcon icon="paint-brush" />
       </div>
@@ -27,7 +27,7 @@
       class="absolute -left-1 -top-1 transform-gpu transition-transform duration-200"
     >
       <div
-        class="w-full h-full flex justify-center items-center rounded-full border border-white border-opacity-20 bg-black bg-opacity-20 group-hover:bg-opacity-30 backdrop-filter backdrop-blur-md shadow-md text-teal-100 group-focus-visible:ring group-focus-visible:ring-teal-100 transition-shadow duration-100"
+        class="w-full h-full flex justify-center items-center rounded-full border border-white border-opacity-20 bg-black bg-opacity-20 group-hover:bg-opacity-30 backdrop-filter backdrop-blur shadow-md text-teal-100 group-focus-visible:ring group-focus-visible:ring-teal-100 transition-shadow duration-100"
       >
         <FontAwesomeIcon icon="eraser" />
       </div>

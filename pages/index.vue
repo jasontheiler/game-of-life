@@ -2,7 +2,7 @@
   <div class="relative w-full h-screen flex flex-col-reverse overflow-hidden">
     <main
       :class="{ '-translate-y-1/3 scale-75': isOpen }"
-      class="absolute inset-x-2 top-0 bottom-[7.5rem] flex flex-col rounded-b-2xl border border-t-0 border-white border-opacity-20 bg-white bg-opacity-20 backdrop-filter backdrop-blur-md shadow-2xl transform-gpu transition-transform duration-500"
+      class="absolute inset-x-2 top-0 bottom-[7.5rem] flex flex-col rounded-b-2xl border border-t-0 border-white border-opacity-20 bg-white bg-opacity-20 backdrop-filter backdrop-blur shadow-2xl transform-gpu transition-transform duration-500"
     >
       <section class="w-full h-full px-4 pt-4 overflow-hidden">
         <div ref="canvasWrapperElement" class="w-full h-full">
@@ -47,7 +47,9 @@
     </main>
 
     <aside class="w-full max-w-screen-md mx-auto px-6">
-      <section></section>
+      <section class="w-full py-6">
+        <AppRange v-model="cellSize" :min="2" :max="24" :step="2" />
+      </section>
 
       <section class="w-full py-6 flex justify-around items-center">
         <AppIconButton icon="undo-alt" @click="pause(), killAllCells()" />
@@ -65,7 +67,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "@nuxtjs/composition-api";
+import { computed, defineComponent, ref } from "@nuxtjs/composition-api";
 
 import { ClientCoordinates, getRelativeCoordinates } from "~/utils";
 import { useOnResize, useUniverse } from "~/composables";
@@ -94,8 +96,6 @@ export default defineComponent({
         canvasHeight.value = canvasWrapperElement.value?.clientHeight;
       }
     }, true);
-
-    cellSize.value = 16;
 
     const areToolsSwitched = ref(false);
 
@@ -131,6 +131,7 @@ export default defineComponent({
       isOpen,
       canvasWrapperElement,
       canvasElement,
+      cellSize,
       killAllCells,
       isPlaying,
       play,

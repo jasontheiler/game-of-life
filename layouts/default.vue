@@ -4,7 +4,7 @@
 
 <style>
 body {
-  @apply bg-gradient-to-r from-emerald-600 to-cyan-600 text-lg text-teal-100;
+  @apply bg-gradient-to-r from-emerald-600 to-cyan-600 text-teal-100;
   -webkit-tap-highlight-color: transparent;
 }
 
