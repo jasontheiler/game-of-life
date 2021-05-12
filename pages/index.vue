@@ -35,7 +35,7 @@
       </section>
 
       <button
-        class="w-full h-12 rounded-2xl text-center text-xl text-black text-opacity-20 hover:text-opacity-30 focus-visible:outline-none focus-visible:ring focus-visible:ring-teal-100 transition-shadow duration-100"
+        class="w-full h-12 rounded-2xl text-center text-xl text-black text-opacity-20 hover:text-opacity-30 focus-visible:outline-none focus-visible:ring focus-visible:ring-current transition-shadow duration-100"
         @click="isOpen = !isOpen"
       >
         <FontAwesomeIcon
@@ -48,7 +48,14 @@
 
     <aside class="w-full max-w-screen-md mx-auto px-6">
       <section class="w-full py-6">
-        <AppRange v-model="cellSize" :min="2" :max="24" :step="2" />
+        <AppSlider
+          v-model="cellSize"
+          :min="2"
+          :max="24"
+          :step="2"
+          label="Cell size"
+          isLazy
+        />
       </section>
 
       <section class="w-full py-6 flex justify-around items-center">
