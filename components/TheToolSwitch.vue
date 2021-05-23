@@ -6,8 +6,8 @@
     <div
       :class="[
         value
-          ? 'w-8 h-8 translate-x-6 translate-y-6 text-xs'
-          : 'z-10 w-10 h-10 text-base',
+          ? 'w-7 h-7 translate-x-7 translate-y-7 text-xs'
+          : 'z-10 w-11 h-11 text-lg',
       ]"
       class="absolute -left-1 -top-1 transform-gpu transition-transform duration-200"
     >
@@ -21,8 +21,8 @@
     <div
       :class="[
         value
-          ? 'z-10 w-10 h-10 text-base'
-          : 'w-8 h-8 translate-x-6 translate-y-6 text-xs',
+          ? 'z-10 w-11 h-11 text-lg'
+          : 'w-7 h-7 translate-x-7 translate-y-7 text-xs',
       ]"
       class="absolute -left-1 -top-1 transform-gpu transition-transform duration-200"
     >

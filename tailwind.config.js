@@ -13,7 +13,7 @@ module.exports = {
       },
 
       fontFamily: {
-        sans: ["Poppins", ...fontFamily.sans],
+        sans: ["'Roboto Mono'", ...fontFamily.sans],
       },
 
       spacing: {

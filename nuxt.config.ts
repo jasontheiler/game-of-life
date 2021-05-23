@@ -48,7 +48,7 @@ const config: NuxtConfig = {
 
   // Global CSS
   // See: https://nuxtjs.org/guides/configuration-glossary/configuration-css/
-  css: ["@fontsource/poppins/latin.css"],
+  css: ["@fontsource/roboto-mono/latin.css"],
 
   // Plugins to load before mounting the app
   // See: https://nuxtjs.org/guides/configuration-glossary/configuration-plugins/

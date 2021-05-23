@@ -2,7 +2,7 @@
   <div class="relative w-full h-screen flex flex-col-reverse overflow-hidden">
     <main
       :class="{ '-translate-y-1/3 scale-75': isOpen }"
-      class="absolute inset-x-2 top-0 bottom-[7.5rem] flex flex-col rounded-b-2xl border border-t-0 border-white border-opacity-20 bg-white bg-opacity-20 backdrop-filter backdrop-blur shadow-2xl transform-gpu transition-transform duration-500"
+      class="absolute inset-x-2 top-0 bottom-[7.5rem] flex flex-col rounded-b-2xl border border-t-0 border-white border-opacity-10 bg-blueGray-700 bg-opacity-50 backdrop-filter backdrop-blur shadow-2xl transform-gpu transition-transform duration-500"
     >
       <section class="w-full h-full px-4 pt-4 overflow-hidden">
         <div ref="canvasWrapperElement" class="w-full h-full">
@@ -35,7 +35,7 @@
       </section>
 
       <button
-        class="w-full h-12 rounded-2xl text-center text-xl text-black text-opacity-20 hover:text-opacity-30 focus-visible:outline-none focus-visible:ring focus-visible:ring-current transition-shadow duration-100"
+        class="w-full h-12 rounded-2xl bg-white bg-opacity-0 hover:bg-opacity-[0.025] text-center text-xl text-white text-opacity-50 focus-visible:outline-none focus-visible:ring focus-visible:ring-white transition-shadow duration-100"
         @click="isOpen = !isOpen"
       >
         <FontAwesomeIcon
@@ -53,7 +53,7 @@
           :min="2"
           :max="24"
           :step="2"
-          label="Cell size"
+          label="cell_size"
           isLazy
         />
       </section>

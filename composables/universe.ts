@@ -19,8 +19,8 @@ export const useUniverse = () => {
         canvasWidth.value,
         canvasHeight.value,
         cellSize.value,
-        "#00000040",
-        "#CBFAF0"
+        "#0F172A",
+        "#FFFFFF"
       );
 
       watchEffect(() =>

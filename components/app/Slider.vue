@@ -10,7 +10,7 @@
       :step="step"
       :value="innerValue"
       type="range"
-      class="appearance-none w-full h-2 rounded-full bg-black bg-opacity-5 hover:bg-opacity-10 shadow-inner focus-visible:outline-none focus-visible:ring focus-visible:ring-current transition-shadow duration-100 cursor-pointer"
+      class="appearance-none w-full h-2 rounded-full bg-black bg-opacity-10 hover:bg-opacity-20 shadow-inner focus-visible:outline-none focus-visible:ring focus-visible:ring-current transition-shadow duration-100 cursor-pointer"
       @input="onInput"
     />
   </div>
