@@ -2,7 +2,12 @@
   <div class="relative">
     <div
       v-if="label"
-      class="-mb-3 text-left text-3xl text-blueGray-600 whitespace-nowrap select-none"
+      class="
+        -mb-3
+        text-left text-3xl text-blueGray-600
+        whitespace-nowrap
+        select-none
+      "
     >
       {{ label }}
     </div>
@@ -13,12 +18,29 @@
       :step="step"
       :value="innerValue"
       type="range"
-      class="appearance-none w-full h-2 rounded-full bg-black bg-opacity-10 hover:bg-opacity-20 shadow-inner focus-visible:outline-none focus-visible:ring focus-visible:ring-current transition-shadow duration-100 cursor-pointer"
+      class="
+        appearance-none
+        w-full
+        h-2
+        rounded-full
+        bg-black bg-opacity-10
+        hover:bg-opacity-20
+        shadow-inner
+        focus-visible:outline-none focus-visible:ring focus-visible:ring-current
+        transition-shadow
+        duration-100
+        cursor-pointer
+      "
       @input="onInput"
     />
 
     <div
-      class="-mt-2 text-right text-3xl text-blueGray-600 whitespace-nowrap select-none"
+      class="
+        -mt-2
+        text-right text-3xl text-blueGray-600
+        whitespace-nowrap
+        select-none
+      "
     >
       {{ innerValue }}{{ unit }}
     </div>

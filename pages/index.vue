@@ -2,7 +2,22 @@
   <div class="relative w-full h-screen flex flex-col-reverse overflow-hidden">
     <main
       :class="{ '-translate-y-1/3 scale-75': isOpen }"
-      class="absolute inset-x-2 top-0 bottom-[7.5rem] z-50 flex flex-col rounded-b-2xl border border-t-0 border-white border-opacity-10 bg-blueGray-700 bg-opacity-50 backdrop-filter backdrop-blur shadow-2xl transform-gpu transition-transform duration-500"
+      class="
+        absolute
+        inset-x-2
+        top-0
+        bottom-[7.5rem]
+        z-50
+        flex flex-col
+        rounded-b-2xl
+        border border-t-0 border-white border-opacity-10
+        bg-blueGray-700 bg-opacity-50
+        backdrop-filter backdrop-blur
+        shadow-2xl
+        transform-gpu
+        transition-transform
+        duration-500
+      "
     >
       <section class="w-full h-full px-4 pt-4 overflow-hidden">
         <div ref="canvasWrapperElement" class="w-full h-full">
@@ -10,32 +25,54 @@
             ref="canvasElement"
             class="cursor-pointer"
             @touchstart.prevent="
-              (isPrimaryActive = true), onPrimaryTool($event.touches[0])
+              (isPrimaryActive = true), onTool($event.touches[0])
             "
-            @touchmove.prevent="onPrimaryTool($event.touches[0])"
-            @touchcancel.prevent="isPrimaryActive = false"
-            @touchend.prevent="isPrimaryActive = false"
             @mousedown.left="
               (isPrimaryActive = true),
                 (isSecondaryActive = false),
-                onPrimaryTool($event)
+                onTool($event)
             "
             @mousedown.right="
               (isSecondaryActive = true),
                 (isPrimaryActive = false),
-                onSecondaryTool($event)
+                onTool($event)
             "
-            @mousemove="onPrimaryTool($event), onSecondaryTool($event)"
-            @mouseout="(isPrimaryActive = false), (isSecondaryActive = false)"
-            @mouseup.left="isPrimaryActive = false"
-            @mouseup.right="isSecondaryActive = false"
+            @touchmove.prevent="isPrimaryActive && onTool($event.touches[0])"
+            @mousemove="
+              (isPrimaryActive || isSecondaryActive) && onTool($event)
+            "
+            @touchcancel.prevent="
+              (prevCoordinates = null), (isPrimaryActive = false)
+            "
+            @touchend.prevent="
+              (prevCoordinates = null), (isPrimaryActive = false)
+            "
+            @mouseout="
+              (prevCoordinates = null),
+                (isPrimaryActive = false),
+                (isSecondaryActive = false)
+            "
+            @mouseup.left="(prevCoordinates = null), (isPrimaryActive = false)"
+            @mouseup.right="
+              (prevCoordinates = null), (isSecondaryActive = false)
+            "
             @contextmenu.prevent
           />
         </div>
       </section>
 
       <button
-        class="w-full h-12 rounded-2xl bg-white bg-opacity-0 hover:bg-opacity-[0.025] text-center text-xl text-white text-opacity-50 focus-visible:outline-none focus-visible:ring focus-visible:ring-white transition-shadow duration-100"
+        class="
+          w-full
+          h-12
+          rounded-2xl
+          bg-white bg-opacity-0
+          hover:bg-opacity-[0.025]
+          text-center text-xl text-white text-opacity-50
+          focus-visible:outline-none focus-visible:ring focus-visible:ring-white
+          transition-shadow
+          duration-100
+        "
         @click="isOpen = !isOpen"
       >
         <FontAwesomeIcon
@@ -75,9 +112,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "@nuxtjs/composition-api";
+import { defineComponent, ref } from "@nuxtjs/composition-api";
 
-import { ClientCoordinates, getRelativeCoordinates } from "~/utils";
+import {
+  ClientCoordinates,
+  getRelativeCoordinates,
+  RelativeCoordinates,
+} from "~/utils";
 import { useOnResize, useUniverse } from "~/composables";
 
 export default defineComponent({
@@ -107,31 +148,26 @@ export default defineComponent({
 
     const areToolsSwitched = ref(false);
 
+    const prevCoordinates = ref<RelativeCoordinates | null>(null);
     const isPrimaryActive = ref(false);
-    const onPrimaryTool = (clientCoordinates: ClientCoordinates) => {
-      if (isPrimaryActive.value && canvasElement.value) {
-        const { relativeX, relativeY } = getRelativeCoordinates(
-          canvasElement.value,
-          clientCoordinates
-        );
-
-        areToolsSwitched.value
-          ? killCellAt.value(relativeX, relativeY)
-          : reviveCellAt.value(relativeX, relativeY);
-      }
-    };
-
     const isSecondaryActive = ref(false);
-    const onSecondaryTool = (clientCoordinates: ClientCoordinates) => {
-      if (isSecondaryActive.value && canvasElement.value) {
+    const onTool = (clientCoordinates: ClientCoordinates) => {
+      if (canvasElement.value) {
         const { relativeX, relativeY } = getRelativeCoordinates(
           canvasElement.value,
           clientCoordinates
         );
 
-        areToolsSwitched.value
-          ? reviveCellAt.value(relativeX, relativeY)
-          : killCellAt.value(relativeX, relativeY);
+        if (isPrimaryActive.value)
+          areToolsSwitched.value
+            ? killCellAt.value(relativeX, relativeY)
+            : reviveCellAt.value(relativeX, relativeY);
+        if (isSecondaryActive.value)
+          areToolsSwitched.value
+            ? reviveCellAt.value(relativeX, relativeY)
+            : killCellAt.value(relativeX, relativeY);
+
+        prevCoordinates.value = { relativeX, relativeY };
       }
     };
 
@@ -145,10 +181,10 @@ export default defineComponent({
       play,
       pause,
       areToolsSwitched,
+      prevCoordinates,
       isPrimaryActive,
-      onPrimaryTool,
       isSecondaryActive,
-      onSecondaryTool,
+      onTool,
     };
   },
 });
