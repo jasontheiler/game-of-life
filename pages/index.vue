@@ -2,7 +2,7 @@
   <div class="relative w-full h-screen flex flex-col-reverse overflow-hidden">
     <main
       :class="{ '-translate-y-1/3 scale-75': isOpen }"
-      class="absolute inset-x-2 top-0 bottom-[7.5rem] flex flex-col rounded-b-2xl border border-t-0 border-white border-opacity-10 bg-blueGray-700 bg-opacity-50 backdrop-filter backdrop-blur shadow-2xl transform-gpu transition-transform duration-500"
+      class="absolute inset-x-2 top-0 bottom-[7.5rem] z-50 flex flex-col rounded-b-2xl border border-t-0 border-white border-opacity-10 bg-blueGray-700 bg-opacity-50 backdrop-filter backdrop-blur shadow-2xl transform-gpu transition-transform duration-500"
     >
       <section class="w-full h-full px-4 pt-4 overflow-hidden">
         <div ref="canvasWrapperElement" class="w-full h-full">
@@ -54,6 +54,7 @@
           :max="24"
           :step="2"
           label="cell_size"
+          unit="px"
           isLazy
         />
       </section>

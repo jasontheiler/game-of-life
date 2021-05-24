@@ -1,7 +1,10 @@
 <template>
-  <div>
-    <div v-if="label" class="mb-1 whitespace-nowrap select-none">
-      {{ label }}: {{ innerValue }}
+  <div class="relative">
+    <div
+      v-if="label"
+      class="-mb-3 text-left text-3xl text-blueGray-600 whitespace-nowrap select-none"
+    >
+      {{ label }}
     </div>
 
     <input
@@ -13,6 +16,12 @@
       class="appearance-none w-full h-2 rounded-full bg-black bg-opacity-10 hover:bg-opacity-20 shadow-inner focus-visible:outline-none focus-visible:ring focus-visible:ring-current transition-shadow duration-100 cursor-pointer"
       @input="onInput"
     />
+
+    <div
+      class="-mt-2 text-right text-3xl text-blueGray-600 whitespace-nowrap select-none"
+    >
+      {{ innerValue }}{{ unit }}
+    </div>
   </div>
 </template>
 
@@ -29,6 +38,11 @@ export default defineComponent({
     },
 
     label: {
+      type: String as PropType<string>,
+      required: false,
+    },
+
+    unit: {
       type: String as PropType<string>,
       required: false,
     },
@@ -83,14 +97,14 @@ export default defineComponent({
 
 <style scoped>
 input[type="range"]::-webkit-slider-thumb {
-  @apply appearance-none w-5 h-5 rounded-full bg-current shadow-md;
+  @apply appearance-none w-6 h-6 rounded-full bg-current shadow-md;
 }
 
 input[type="range"]::-moz-range-thumb {
-  @apply appearance-none w-5 h-5 rounded-full bg-current shadow-md;
+  @apply appearance-none w-6 h-6 rounded-full bg-current shadow-md;
 }
 
 input[type="range"]::-ms-thumb {
-  @apply appearance-none w-5 h-5 rounded-full bg-current shadow-md;
+  @apply appearance-none w-6 h-6 rounded-full bg-current shadow-md;
 }
 </style>
