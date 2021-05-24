@@ -148,9 +148,19 @@ export default defineComponent({
 
     const areToolsSwitched = ref(false);
 
-    const prevCoordinates = ref<RelativeCoordinates | null>(null);
+    const prevCoordinates = ref<{ prevX: number; prevY: number } | null>(null);
     const isPrimaryActive = ref(false);
     const isSecondaryActive = ref(false);
+    const runToolAt = (x: number, y: number) => {
+      if (isPrimaryActive.value)
+        areToolsSwitched.value
+          ? killCellAt.value(x, y)
+          : reviveCellAt.value(x, y);
+      if (isSecondaryActive.value)
+        areToolsSwitched.value
+          ? reviveCellAt.value(x, y)
+          : killCellAt.value(x, y);
+    };
     const onTool = (clientCoordinates: ClientCoordinates) => {
       if (canvasElement.value) {
         const { relativeX, relativeY } = getRelativeCoordinates(
@@ -158,16 +168,24 @@ export default defineComponent({
           clientCoordinates
         );
 
-        if (isPrimaryActive.value)
-          areToolsSwitched.value
-            ? killCellAt.value(relativeX, relativeY)
-            : reviveCellAt.value(relativeX, relativeY);
-        if (isSecondaryActive.value)
-          areToolsSwitched.value
-            ? reviveCellAt.value(relativeX, relativeY)
-            : killCellAt.value(relativeX, relativeY);
+        if (prevCoordinates.value) {
+          const { prevX, prevY } = prevCoordinates.value;
+          const vecX = relativeX - prevX;
+          const vecY = relativeY - prevY;
+          const vecLength = Math.sqrt(vecX ** 2 + vecY ** 2);
+          const maxPoints = vecLength / cellSize.value;
 
-        prevCoordinates.value = { relativeX, relativeY };
+          for (let i = 1; i < maxPoints; i++) {
+            const pointX = prevX + Math.floor(vecX * (i / maxPoints));
+            const pointY = prevY + Math.floor(vecY * (i / maxPoints));
+
+            runToolAt(pointX, pointY);
+          }
+        }
+
+        prevCoordinates.value = { prevX: relativeX, prevY: relativeY };
+
+        runToolAt(relativeX, relativeY);
       }
     };
 
