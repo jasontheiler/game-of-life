@@ -11,7 +11,7 @@
       bg-black bg-opacity-20
       hover:bg-opacity-30
       backdrop-filter backdrop-blur
-      shadow-md
+      shadow-lg
       focus-visible:outline-none focus-visible:ring focus-visible:ring-current
       transition-shadow
       duration-100

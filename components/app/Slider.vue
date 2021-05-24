@@ -119,14 +119,14 @@ export default defineComponent({
 
 <style scoped>
 input[type="range"]::-webkit-slider-thumb {
-  @apply appearance-none w-6 h-6 rounded-full bg-current shadow-md;
+  @apply appearance-none w-6 h-6 rounded-full bg-current shadow-lg;
 }
 
 input[type="range"]::-moz-range-thumb {
-  @apply appearance-none w-6 h-6 rounded-full bg-current shadow-md;
+  @apply appearance-none w-6 h-6 rounded-full bg-current shadow-lg;
 }
 
 input[type="range"]::-ms-thumb {
-  @apply appearance-none w-6 h-6 rounded-full bg-current shadow-md;
+  @apply appearance-none w-6 h-6 rounded-full bg-current shadow-lg;
 }
 </style>

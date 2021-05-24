@@ -30,7 +30,7 @@
           bg-black bg-opacity-20
           group-hover:bg-opacity-30
           backdrop-filter backdrop-blur
-          shadow-md
+          shadow-lg
           group-focus-visible:ring group-focus-visible:ring-current
           transition-shadow
           duration-100
@@ -67,7 +67,7 @@
           bg-black bg-opacity-20
           group-hover:bg-opacity-30
           backdrop-filter backdrop-blur
-          shadow-md
+          shadow-lg
           group-focus-visible:ring group-focus-visible:ring-current
           transition-shadow
           duration-100
