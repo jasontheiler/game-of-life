@@ -117,18 +117,20 @@ const config: NuxtConfig = {
     manifest: {
       name: "Conway's Game of Life",
       short_name: "Game of Life",
-      description: "Work in progress!",
-      background_color: "#0D9488",
+      description:
+        "A fast, aesthetic and mobile-friendly implementation of Conway's Game of Life.",
+      background_color: "#0F172A",
     },
 
     meta: {
       name: "Conway's Game of Life",
       author: "Jason Theiler",
-      description: "Work in progress!",
+      description:
+        "A fast, aesthetic and mobile-friendly implementation of Conway's Game of Life.",
       ogHost: baseUrl,
       ogImage: "/image.png",
       twitterCard: "summary_large_image",
-      theme_color: "#0D9488",
+      theme_color: "#0F172A",
     },
   },
 };
