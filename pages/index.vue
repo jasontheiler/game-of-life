@@ -114,11 +114,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "@nuxtjs/composition-api";
 
-import {
-  ClientCoordinates,
-  getRelativeCoordinates,
-  RelativeCoordinates,
-} from "~/utils";
+import { ClientCoordinates, getRelativeCoordinates } from "~/utils";
 import { useOnResize, useUniverse } from "~/composables";
 
 export default defineComponent({
