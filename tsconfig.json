@@ -13,7 +13,7 @@
       "@/*": ["./*"]
     },
     "lib": ["ESNext", "ESNext.AsyncIterable", "DOM"],
-    "types": ["@types/node", "@nuxt/types"]
+    "types": ["@types/node", "@nuxt/types", "pinia/nuxt/types"]
   },
   "exclude": ["./.nuxt", "./dist", "./node_modules"]
 }
