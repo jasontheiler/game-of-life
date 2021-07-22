@@ -43,21 +43,17 @@ export default defineComponent({
     onMounted(async () => {
       const { Universe } = await import("~/wasm/universe/pkg");
 
-      if (canvasElement.value) {
+      if (canvasWrapperElement.value && canvasElement.value) {
         universeStore.universe = new Universe(
           canvasElement.value,
-          canvasElement.value.clientWidth,
-          canvasElement.value.clientHeight,
+          canvasWrapperElement.value.clientWidth,
+          canvasWrapperElement.value.clientHeight,
           universeStore.config.cellSize,
           "#0F172A",
-          "#FFFFFF"
+          "#000000"
         );
       }
     });
-
-    // reviveCellAt.value = (x, y) => universe.reviveCellAt(x, y);
-    // killCellAt.value = (x, y) => universe.killCellAt(x, y);
-    // tick.value = () => universe.tick();
 
     useOnResize(() => {
       if (canvasWrapperElement.value)
@@ -65,7 +61,7 @@ export default defineComponent({
           canvasWrapperElement.value.clientWidth,
           canvasWrapperElement.value.clientHeight
         );
-    }, true);
+    });
 
     const prevCoordinates = ref<{ prevX: number; prevY: number } | null>(null);
     const isPrimaryActive = ref(false);
@@ -111,6 +107,7 @@ export default defineComponent({
     return {
       canvasWrapperElement,
       canvasElement,
+      prevCoordinates,
       isPrimaryActive,
       isSecondaryActive,
       onTool,
