@@ -8,6 +8,8 @@ module.exports = {
 
   darkMode: "class",
 
+  plugins: [require("tailwindcss-neumorphism")],
+
   theme: {
     extend: {
       colors: {

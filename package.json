@@ -28,6 +28,7 @@
     "pinia": "^0.5.2",
     "postcss": "^8.3.5",
     "postcss-focus-visible": "^5.0.0",
-    "prettier": "^2.3.2"
+    "prettier": "^2.3.2",
+    "tailwindcss-neumorphism": "^0.1.0"
   }
 }
