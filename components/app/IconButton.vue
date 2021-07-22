@@ -7,14 +7,17 @@
     }"
     class="
       rounded-full
-      border border-white border-opacity-20
-      bg-black bg-opacity-20
-      hover:bg-opacity-30
-      backdrop-filter backdrop-blur
+      bg-white
+      dark:bg-black
       shadow-lg
-      focus-visible:outline-none focus-visible:ring focus-visible:ring-current
-      transition-shadow
-      duration-100
+      text-black
+      dark:text-white
+      focus-visible:outline-none
+      focus-visible:ring
+      focus-visible:ring-offset-4
+      focus-visible:ring-offset-fuchsia-100
+      focus-visible:ring-white
+      dark:focus-visible:ring-black
     "
     v-on="$listeners"
   >
