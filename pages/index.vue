@@ -1,13 +1,21 @@
 <template>
-  <div class="w-full h-screen flex flex-col md:flex-row overflow-hidden">
-    <main class="">
+  <div
+    class="
+      w-full
+      h-screen
+      flex flex-col-reverse
+      xl:flex-row-reverse
+      overflow-hidden
+    "
+  >
+    <aside class="flex flex-col-reverse xl:flex-row-reverse">
+      <TheControls />
+
+      <TheDrawer />
+    </aside>
+
+    <main class="w-full h-full">
       <TheUniverse />
     </main>
-
-    <aside class="w-full max-w-screen-md mx-auto px-6">
-      <TheDrawer />
-
-      <TheControls />
-    </aside>
   </div>
 </template>
