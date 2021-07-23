@@ -25,6 +25,7 @@
     "@nuxtjs/tailwindcss": "^4.2.1",
     "@wasm-tool/wasm-pack-plugin": "^1.4.0",
     "focus-visible": "^5.2.0",
+    "normalize-url": "^7.0.0",
     "pinia": "^0.5.2",
     "postcss": "^8.3.6",
     "postcss-focus-visible": "^5.0.0",

@@ -1,15 +1,15 @@
 import { resolve } from "path";
 import { NuxtConfig } from "@nuxt/types";
 import WasmPackPlugin from "@wasm-tool/wasm-pack-plugin";
-
-import { normalizeUrl } from "./utils";
+import normalizeUrl from "normalize-url";
 
 // Reads environment variables.
-const { BASE_URL } = process.env;
-const baseUrl = normalizeUrl(BASE_URL ?? "");
+const { BASE_URL, NODE_ENV } = process.env;
+const baseUrl =
+  BASE_URL && normalizeUrl(BASE_URL, { forceHttps: NODE_ENV === "production" });
 
 const config: NuxtConfig = {
-  // Dir configuration
+  // Directories configuration
   // See: https://nuxtjs.org/guides/configuration-glossary/configuration-dir
   dir: {
     static: "public",
@@ -19,21 +19,7 @@ const config: NuxtConfig = {
   // See: https://nuxtjs.org/guides/configuration-glossary/configuration-target
   target: "static",
 
-  // Generate configuration
-  // See:
-  //   - https://nuxtjs.org/guides/configuration-glossary/configuration-generate/
-  //   - https://composition-api.nuxtjs.org/getting-started/setup#quick-start
-  generate: {
-    interval: 2000,
-  },
-
-  // Public runtime configuration
-  // See: https://nuxtjs.org/guides/configuration-glossary/configuration-runtime-config/
-  publicRuntimeConfig: {
-    baseUrl,
-  },
-
-  // Page metadata
+  // Default metadata
   // See: https://nuxtjs.org/guides/configuration-glossary/configuration-head/
   head: {
     meta: [
@@ -54,7 +40,7 @@ const config: NuxtConfig = {
   // See: https://nuxtjs.org/guides/configuration-glossary/configuration-plugins/
   plugins: [{ src: "~/plugins/polyfills.ts", mode: "client" }],
 
-  // Auto import components
+  // Components auto import
   // See: https://nuxtjs.org/guides/configuration-glossary/configuration-components/
   components: true,
 
