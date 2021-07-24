@@ -50,14 +50,12 @@ const config: NuxtConfig = {
   //   - https://typescript.nuxtjs.org/
   //   - https://composition-api.nuxtjs.org/
   //   - https://pinia.esm.dev/
-  //   - https://color-mode.nuxtjs.org/
   //   - https://tailwindcss.nuxtjs.org/
   //   - https://github.com/nuxt-community/fontawesome-module
   buildModules: [
     "@nuxt/typescript-build",
     "@nuxtjs/composition-api/module",
     "pinia/nuxt",
-    "@nuxtjs/color-mode",
     "@nuxtjs/tailwindcss",
     "@nuxtjs/fontawesome",
   ],
@@ -77,12 +75,6 @@ const config: NuxtConfig = {
         "postcss-focus-visible": {},
       },
     },
-  },
-
-  // Color mode configuration
-  // See: https://color-mode.nuxtjs.org/
-  colorMode: {
-    classSuffix: "",
   },
 
   // Font Awesome Icons configuration

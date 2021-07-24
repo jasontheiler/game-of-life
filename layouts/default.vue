@@ -4,7 +4,7 @@
 
 <style>
 body {
-  @apply bg-green text-white dark:text-gray;
+  @apply bg-green text-gray;
   -webkit-tap-highlight-color: transparent;
 }
 

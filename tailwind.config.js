@@ -5,8 +5,6 @@ const { fontFamily } = require("tailwindcss/defaultTheme");
 module.exports = {
   mode: "jit",
 
-  darkMode: "class",
-
   plugins: [require("tailwindcss-neumorphism")],
 
   theme: {

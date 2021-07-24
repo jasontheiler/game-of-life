@@ -16,8 +16,7 @@
     "types": [
       "@types/node",
       "@nuxt/types",
-      "pinia/nuxt/types",
-      "@nuxtjs/color-mode"
+      "pinia/nuxt/types"
     ]
   },
   "exclude": ["./.nuxt", "./dist", "./node_modules"]
