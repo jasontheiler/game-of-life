@@ -4,7 +4,7 @@
       v-if="label"
       class="
         -mb-3
-        text-left text-3xl text-blueGray-600
+        text-left text-3xl text-white
         whitespace-nowrap
         select-none
       "

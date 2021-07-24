@@ -1,14 +1,17 @@
 <template>
-  <section class="w-full py-6">
-    <AppSlider
-      v-model="universeStore.config.cellSize"
-      :min="2"
-      :max="24"
-      :step="2"
-      label="cell_size"
-      unit="px"
-      isLazy
-    />
+  <section>
+    <button></button>
+
+    <div>
+      <AppSlider
+        v-model="universeStore.config.cellSize"
+        :min="1"
+        :max="24"
+        label="cell_size"
+        unit="px"
+        isLazy
+      />
+    </div>
   </section>
 </template>
 

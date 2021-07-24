@@ -1,5 +1,7 @@
-import { watch } from "@nuxtjs/composition-api";
+import { watch, watchEffect } from "@nuxtjs/composition-api";
 import { defineStore } from "pinia";
+
+let animationFrameHandle: number;
 
 export const useUniverseStore = defineStore({
   id: "universe",
@@ -7,7 +9,7 @@ export const useUniverseStore = defineStore({
   state() {
     return {
       universe: null as any,
-      isPlaying: false,
+      isRunning: false,
       areToolsSwitched: false,
       config: {
         cellSize: 16,
@@ -16,23 +18,44 @@ export const useUniverseStore = defineStore({
   },
 
   actions: {
-    resetUniverse() {
-      this.isPlaying = false;
+    init() {
+      const config = localStorage.getItem("universeConfig");
+      if (config) this.config = JSON.parse(config);
+
+      watch(
+        () => this.config.cellSize,
+        (nextCellSize) => {
+          this.stop();
+          this.universe?.setCellSize(nextCellSize);
+        }
+      );
+      watchEffect(() =>
+        localStorage.setItem("universeConfig", JSON.stringify(this.config))
+      );
+    },
+
+    start() {
+      if (this.isRunning) return;
+
+      const render = () => {
+        this.universe?.tick();
+        animationFrameHandle = requestAnimationFrame(render);
+      };
+
+      this.isRunning = true;
+      animationFrameHandle = requestAnimationFrame(render);
+    },
+
+    stop() {
+      if (!this.isRunning) return;
+
+      this.isRunning = false;
+      cancelAnimationFrame(animationFrameHandle);
+    },
+
+    reset() {
+      this.stop();
       this.universe?.killAllCells();
     },
   },
 });
-
-const universeStore = useUniverseStore();
-
-watch(
-  () => universeStore.config,
-  (newConfig) =>
-    localStorage.setItem("universeConfig", JSON.stringify(newConfig)),
-  { deep: true }
-);
-
-watch(
-  () => universeStore.config.cellSize,
-  (newCellSize) => universeStore.universe.setCellSize(newCellSize)
-);

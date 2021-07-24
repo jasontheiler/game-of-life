@@ -14,7 +14,7 @@
       <TheDrawer />
     </aside>
 
-    <main class="w-full h-full">
+    <main class="w-full h-full bg-white dark:bg-gray">
       <TheUniverse />
     </main>
   </div>

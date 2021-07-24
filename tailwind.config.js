@@ -1,4 +1,3 @@
-const colors = require("tailwindcss/colors");
 const { fontFamily } = require("tailwindcss/defaultTheme");
 
 // Tailwind CSS configuration
@@ -11,11 +10,20 @@ module.exports = {
   plugins: [require("tailwindcss-neumorphism")],
 
   theme: {
-    extend: {
-      colors: {
-        ...colors,
+    colors: {
+      current: "currentColor",
+      transparent: "transparent",
+      black: "#000000",
+      white: "#FFFFFF",
+      gray: {
+        DEFAULT: "#001E26",
       },
+      green: {
+        DEFAULT: "#00DC82",
+      },
+    },
 
+    extend: {
       fontFamily: {
         sans: ["'Roboto Mono'", ...fontFamily.sans],
       },

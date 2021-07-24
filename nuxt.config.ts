@@ -79,6 +79,12 @@ const config: NuxtConfig = {
     },
   },
 
+  // Color mode configuration
+  // See: https://color-mode.nuxtjs.org/
+  colorMode: {
+    classSuffix: "",
+  },
+
   // Font Awesome Icons configuration
   // See: https://github.com/nuxt-community/fontawesome-module#module-options
   fontawesome: {

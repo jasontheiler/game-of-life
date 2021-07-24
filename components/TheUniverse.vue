@@ -32,6 +32,7 @@ import { defineComponent, onMounted, ref } from "@nuxtjs/composition-api";
 import { ClientCoordinates, getRelativeCoordinates } from "~/utils";
 import { useUniverseStore } from "~/store";
 import { useOnResize } from "~/composables";
+import { theme } from "~/tailwind.config";
 
 export default defineComponent({
   setup() {
@@ -41,6 +42,8 @@ export default defineComponent({
     const canvasElement = ref<HTMLCanvasElement>();
 
     onMounted(async () => {
+      universeStore.init();
+
       const { Universe } = await import("~/wasm/universe/pkg");
 
       if (canvasWrapperElement.value && canvasElement.value) {
@@ -49,8 +52,7 @@ export default defineComponent({
           canvasWrapperElement.value.clientWidth,
           canvasWrapperElement.value.clientHeight,
           universeStore.config.cellSize,
-          "#0F172A",
-          "#000000"
+          theme.colors.white
         );
       }
     });
