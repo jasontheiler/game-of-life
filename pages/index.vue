@@ -14,8 +14,14 @@
       <TheDrawer />
     </aside>
 
-    <main class="w-full h-full bg-white dark:bg-gray">
+    <main class="w-full h-full bg-white dark:bg-gray shadow">
       <TheUniverse />
     </main>
   </div>
 </template>
+
+<style scoped>
+.shadow {
+  box-shadow: 0 0 32px #000000;
+}
+</style>

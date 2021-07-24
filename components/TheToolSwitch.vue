@@ -1,80 +1,46 @@
 <template>
   <button
-    class="group relative w-12 h-12 focus-visible:outline-none"
+    class="
+      w-[5.5rem]
+      xl:w-12
+      h-12
+      xl:h-[5.5rem]
+      -m-6
+      rounded-full
+      nm-concave-green-lg
+      active:nm-inset-green-lg
+      focus-visible:outline-none
+    "
     @click="$emit('input', !value)"
   >
     <div
-      :class="[
-        value
-          ? 'w-7 h-7 translate-x-7 translate-y-7 text-xs'
-          : 'z-10 w-11 h-11 text-lg',
-      ]"
       class="
-        absolute
-        -left-1
-        -top-1
-        transform-gpu
-        transition-transform
-        duration-200
+        relative
+        w-full
+        h-full
+        p-1
+        rounded-full
+        flex
+        xl:flex-col
+        justify-around
+        items-center
+        group-focus-visible:ring-4 group-focus-visible:ring-current
+        transition-shadow
+        duration-100
       "
     >
       <div
-        class="
-          w-full
-          h-full
-          flex
-          justify-center
-          items-center
-          rounded-full
-          border border-white border-opacity-20
-          bg-black bg-opacity-20
-          group-hover:bg-opacity-30
-          backdrop-filter backdrop-blur
-          shadow-lg
-          group-focus-visible:ring group-focus-visible:ring-current
-          transition-shadow
-          duration-100
-        "
-      >
-        <FontAwesomeIcon icon="paint-brush" />
-      </div>
-    </div>
+        :class="[
+          value
+            ? 'left-1/2 xl:left-1 right-1 top-1 xl:top-1/2 bottom-1 activate'
+            : 'left-1 right-1/2 xl:right-1 top-1 bottom-1 xl:bottom-1/2 deactivate',
+        ]"
+        class="absolute z-0 rounded-full bg-purple shadow-md"
+      />
 
-    <div
-      :class="[
-        value
-          ? 'z-10 w-11 h-11 text-lg'
-          : 'w-7 h-7 translate-x-7 translate-y-7 text-xs',
-      ]"
-      class="
-        absolute
-        -left-1
-        -top-1
-        transform-gpu
-        transition-transform
-        duration-200
-      "
-    >
-      <div
-        class="
-          w-full
-          h-full
-          flex
-          justify-center
-          items-center
-          rounded-full
-          border border-white border-opacity-20
-          bg-black bg-opacity-20
-          group-hover:bg-opacity-30
-          backdrop-filter backdrop-blur
-          shadow-lg
-          group-focus-visible:ring group-focus-visible:ring-current
-          transition-shadow
-          duration-100
-        "
-      >
-        <FontAwesomeIcon icon="eraser" />
-      </div>
+      <FontAwesomeIcon icon="paint-brush" class="z-10" />
+
+      <FontAwesomeIcon icon="eraser" class="z-10" />
     </div>
   </button>
 </template>
@@ -91,3 +57,72 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.activate {
+  animation: switch-right 200ms;
+}
+
+@screen xl {
+  .activate {
+    animation: switch-down 200ms;
+  }
+}
+
+.deactivate {
+  animation: switch-left 200ms;
+}
+
+@screen xl {
+  .deactivate {
+    animation: switch-up 200ms;
+  }
+}
+
+@keyframes switch-right {
+  0% {
+    @apply left-1 right-1/2;
+  }
+  50% {
+    @apply left-1 right-1;
+  }
+  100% {
+    @apply left-1/2 right-1;
+  }
+}
+
+@keyframes switch-left {
+  0% {
+    @apply left-1/2 right-1;
+  }
+  50% {
+    @apply left-1 right-1;
+  }
+  100% {
+    @apply left-1 right-1/2;
+  }
+}
+
+@keyframes switch-down {
+  0% {
+    @apply top-1 bottom-1/2;
+  }
+  50% {
+    @apply top-1 bottom-1;
+  }
+  100% {
+    @apply top-1/2 bottom-1;
+  }
+}
+@keyframes switch-up {
+  0% {
+    @apply top-1/2 bottom-1;
+  }
+  50% {
+    @apply top-1 bottom-1;
+  }
+  100% {
+    @apply top-1 bottom-1/2;
+  }
+}
+</style>

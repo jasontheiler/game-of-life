@@ -15,12 +15,9 @@ module.exports = {
       transparent: "transparent",
       black: "#000000",
       white: "#FFFFFF",
-      gray: {
-        DEFAULT: "#001E26",
-      },
-      green: {
-        DEFAULT: "#00DC82",
-      },
+      gray: "#0B1015",
+      green: "#41B883",
+      purple: "#D6AAFF",
     },
 
     extend: {
