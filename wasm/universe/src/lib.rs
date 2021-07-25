@@ -7,6 +7,7 @@ use wasm_bindgen::prelude::*;
 use web_sys::HtmlCanvasElement;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[repr(u8)]
 enum Cell {
     Dead = 0,
     Alive = 1,
@@ -45,7 +46,7 @@ impl Universe {
         let offset_x = (width % cell_size) / 2;
         let offset_y = (height % cell_size) / 2;
 
-        let universe = Self {
+        Self {
             canvas,
             rows,
             cols,
@@ -54,11 +55,7 @@ impl Universe {
             offset_x,
             offset_y,
             cell_color,
-        };
-
-        Self::draw_cells(&universe);
-
-        universe
+        }
     }
 
     /// Sets the universe's size to the specified `width` and `height` and
@@ -83,7 +80,6 @@ impl Universe {
         self.offset_y = (height % self.cell_size) / 2;
 
         self.clear_canvas();
-        self.draw_cells();
     }
 
     /// Sets the universe's cell size to the specified `size` and recalculates the
@@ -107,7 +103,6 @@ impl Universe {
         self.offset_y = (self.canvas.height() % size) / 2;
 
         self.clear_canvas();
-        self.draw_cells();
     }
 
     /// Revives the cell at the specified `x` and `y` coordinates.
@@ -170,7 +165,7 @@ impl Universe {
     pub fn kill_all_cells(&mut self) {
         self.cells = (0..self.rows * self.cols).map(|_| Cell::Dead).collect();
 
-        self.draw_cells();
+        self.clear_canvas();
     }
 
     pub fn tick(&mut self) {
@@ -244,14 +239,6 @@ impl Universe {
             self.canvas.width() as f64,
             self.canvas.height() as f64,
         );
-    }
-
-    fn draw_cells(&self) {
-        for row in 0..self.rows {
-            for col in 0..self.cols {
-                self.draw_cell(row, col);
-            }
-        }
     }
 
     fn draw_cell(&self, row: u32, col: u32) {
