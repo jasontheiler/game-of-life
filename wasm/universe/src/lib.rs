@@ -1,10 +1,11 @@
-#![allow(unused_unsafe)]
+#![deny(nonstandard_style)]
+#![warn(future_incompatible, rust_2018_idioms, unreachable_pub)]
 
-mod js;
 mod utils;
 
 use wasm_bindgen::prelude::*;
-use web_sys::HtmlCanvasElement;
+use wasm_bindgen::JsCast;
+use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u8)]
@@ -16,17 +17,26 @@ enum Cell {
 #[wasm_bindgen]
 pub struct Universe {
     canvas: HtmlCanvasElement,
+    ctx: CanvasRenderingContext2d,
     rows: u32,
     cols: u32,
     cells: Vec<Cell>,
+    next_cells: Vec<Cell>,
     cell_size: u32,
     offset_x: u32,
     offset_y: u32,
-    cell_color: String,
 }
 
 #[wasm_bindgen]
 impl Universe {
+    /// Creates a new universe with the specified properties that will be drawn on
+    /// the `canvas`.
+    ///
+    /// # Examples
+    ///
+    /// ```ts
+    /// const universe = new Universe(canvas, 512, 512, 16, "#000");
+    /// ```
     #[wasm_bindgen(constructor)]
     pub fn new(
         canvas: HtmlCanvasElement,
@@ -40,21 +50,31 @@ impl Universe {
         canvas.set_width(width);
         canvas.set_height(height);
 
+        let ctx = canvas
+            .get_context("2d")
+            .unwrap()
+            .unwrap()
+            .dyn_into::<CanvasRenderingContext2d>()
+            .unwrap();
+        ctx.set_fill_style(&JsValue::from(&cell_color));
+
         let rows = height / cell_size;
         let cols = width / cell_size;
-        let cells = (0..rows * cols).map(|_| Cell::Dead).collect();
+        let cells = vec![Cell::Dead; (rows * cols) as usize];
+        let next_cells = cells.clone();
         let offset_x = (width % cell_size) / 2;
         let offset_y = (height % cell_size) / 2;
 
         Self {
             canvas,
+            ctx,
             rows,
             cols,
             cells,
+            next_cells,
             cell_size,
             offset_x,
             offset_y,
-            cell_color,
         }
     }
 
@@ -66,7 +86,7 @@ impl Universe {
     /// # Examples
     ///
     /// ```ts
-    /// const universe = new Universe(canvas, 512, 512, 16);
+    /// const universe = new Universe(canvas, 512, 512, 16, "#000");
     /// universe.setSize(768, 256);
     /// ```
     #[wasm_bindgen(js_name = setSize)]
@@ -75,7 +95,8 @@ impl Universe {
         self.canvas.set_height(height);
         self.rows = height / self.cell_size;
         self.cols = width / self.cell_size;
-        self.cells = (0..self.rows * self.cols).map(|_| Cell::Dead).collect();
+        self.cells = vec![Cell::Dead; (self.rows * self.cols) as usize];
+        self.next_cells = self.cells.clone();
         self.offset_x = (width % self.cell_size) / 2;
         self.offset_y = (height % self.cell_size) / 2;
 
@@ -90,14 +111,15 @@ impl Universe {
     /// # Examples
     ///
     /// ```ts
-    /// const universe = new Universe(canvas, 512, 512, 16);
-    /// universe.setCellSize(24);
+    /// const universe = new Universe(canvas, 512, 512, 16, "#000");
+    /// universe.setCellSize(8);
     /// ```
     #[wasm_bindgen(js_name = setCellSize)]
     pub fn set_cell_size(&mut self, size: u32) {
         self.rows = self.canvas.height() / size;
         self.cols = self.canvas.width() / size;
-        self.cells = (0..self.rows * self.cols).map(|_| Cell::Dead).collect();
+        self.cells = vec![Cell::Dead; (self.rows * self.cols) as usize];
+        self.next_cells = self.cells.clone();
         self.cell_size = size;
         self.offset_x = (self.canvas.width() % size) / 2;
         self.offset_y = (self.canvas.height() % size) / 2;
@@ -110,7 +132,7 @@ impl Universe {
     /// # Examples
     ///
     /// ```ts
-    /// const universe = new Universe(canvas, 512, 512, 16);
+    /// const universe = new Universe(canvas, 512, 512, 16, "#000");
     /// universe.reviveCellAt(128, 256);
     /// ```
     #[wasm_bindgen(js_name = reviveCellAt)]
@@ -134,7 +156,7 @@ impl Universe {
     /// # Examples
     ///
     /// ```ts
-    /// const universe = new Universe(canvas, 512, 512, 16);
+    /// const universe = new Universe(canvas, 512, 512, 16, "#000");
     /// universe.killCellAt(128, 256);
     /// ```
     #[wasm_bindgen(js_name = killCellAt)]
@@ -150,7 +172,7 @@ impl Universe {
 
         self.cells[idx] = Cell::Dead;
 
-        self.draw_cell(row, col);
+        self.clear_cell(row, col);
     }
 
     /// Kills all cells.
@@ -158,47 +180,39 @@ impl Universe {
     /// # Examples
     ///
     /// ```ts
-    /// const universe = new Universe(canvas, 512, 512, 16);
+    /// const universe = new Universe(canvas, 512, 512, 16, "#000");
     /// universe.killAllCells();
     /// ```
     #[wasm_bindgen(js_name = killAllCells)]
     pub fn kill_all_cells(&mut self) {
-        self.cells = (0..self.rows * self.cols).map(|_| Cell::Dead).collect();
+        self.cells.fill(Cell::Dead);
 
         self.clear_canvas();
     }
 
+    /// Progresses the universe one tick.
+    ///
+    /// # Examples
+    ///
+    /// ```ts
+    /// const universe = new Universe(canvas, 512, 512, 16, "#000");
+    /// universe.tick();
+    /// ```
     pub fn tick(&mut self) {
-        let ctx = js::get_canvas_context_2d(&self.canvas);
-
-        ctx.set_fill_style(&JsValue::from(&self.cell_color));
-
-        let mut next_cells = self.cells.clone();
-
         for row in 0..self.rows {
             for col in 0..self.cols {
                 let idx = self.get_index(row, col);
                 let cell = self.cells[idx];
                 let live_neighbors = self.live_neighbors(row, col);
 
-                next_cells[idx] = match (cell, live_neighbors) {
+                self.next_cells[idx] = match (cell, live_neighbors) {
                     (Cell::Alive, x) if x > 3 || x < 2 => {
-                        ctx.clear_rect(
-                            (self.offset_x + col * self.cell_size) as f64,
-                            (self.offset_y + row * self.cell_size) as f64,
-                            self.cell_size as f64,
-                            self.cell_size as f64,
-                        );
+                        self.clear_cell(row, col);
 
                         Cell::Dead
                     }
                     (Cell::Dead, 3) => {
-                        ctx.fill_rect(
-                            (self.offset_x + col * self.cell_size) as f64,
-                            (self.offset_y + row * self.cell_size) as f64,
-                            self.cell_size as f64,
-                            self.cell_size as f64,
-                        );
+                        self.draw_cell(row, col);
 
                         Cell::Alive
                     }
@@ -207,7 +221,7 @@ impl Universe {
             }
         }
 
-        self.cells = next_cells;
+        self.cells.copy_from_slice(&self.next_cells);
     }
 
     fn live_neighbors(&self, row: u32, col: u32) -> u8 {
@@ -230,42 +244,34 @@ impl Universe {
         count
     }
 
-    fn clear_canvas(&self) {
-        let ctx = js::get_canvas_context_2d(&self.canvas);
+    fn get_index(&self, row: u32, col: u32) -> usize {
+        (row * self.cols + col) as usize
+    }
 
-        ctx.clear_rect(
+    fn draw_cell(&self, row: u32, col: u32) {
+        self.ctx.fill_rect(
+            (self.offset_x + col * self.cell_size) as f64,
+            (self.offset_y + row * self.cell_size) as f64,
+            self.cell_size as f64,
+            self.cell_size as f64,
+        );
+    }
+
+    fn clear_cell(&self, row: u32, col: u32) {
+        self.ctx.clear_rect(
+            (self.offset_x + col * self.cell_size) as f64,
+            (self.offset_y + row * self.cell_size) as f64,
+            self.cell_size as f64,
+            self.cell_size as f64,
+        )
+    }
+
+    fn clear_canvas(&self) {
+        self.ctx.clear_rect(
             0.0,
             0.0,
             self.canvas.width() as f64,
             self.canvas.height() as f64,
         );
-    }
-
-    fn draw_cell(&self, row: u32, col: u32) {
-        let ctx = js::get_canvas_context_2d(&self.canvas);
-
-        match self.cells[self.get_index(row, col)] {
-            Cell::Dead => {
-                ctx.clear_rect(
-                    (self.offset_x + col * self.cell_size) as f64,
-                    (self.offset_y + row * self.cell_size) as f64,
-                    self.cell_size as f64,
-                    self.cell_size as f64,
-                );
-            }
-            Cell::Alive => {
-                ctx.set_fill_style(&JsValue::from(&self.cell_color));
-                ctx.fill_rect(
-                    (self.offset_x + col * self.cell_size) as f64,
-                    (self.offset_y + row * self.cell_size) as f64,
-                    self.cell_size as f64,
-                    self.cell_size as f64,
-                );
-            }
-        }
-    }
-
-    fn get_index(&self, row: u32, col: u32) -> usize {
-        (row * self.cols + col) as usize
     }
 }
