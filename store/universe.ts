@@ -1,6 +1,8 @@
 import { watch, watchEffect } from "@nuxtjs/composition-api";
 import { defineStore } from "pinia";
 
+import { getDevicePixels } from "~/utils";
+
 let animationFrameHandle: number;
 
 export const useUniverseStore = defineStore({
@@ -26,7 +28,7 @@ export const useUniverseStore = defineStore({
         () => this.config.cellSize,
         (nextCellSize) => {
           this.stop();
-          this.universe?.setCellSize(nextCellSize);
+          this.universe?.setCellSize(getDevicePixels(nextCellSize));
         }
       );
       watchEffect(() =>

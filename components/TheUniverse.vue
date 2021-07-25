@@ -2,7 +2,7 @@
   <div ref="canvasWrapperElement" class="w-full h-full">
     <canvas
       ref="canvasElement"
-      class="cursor-pointer"
+      class="w-full h-full cursor-pointer"
       @touchstart.prevent="(isPrimaryActive = true), onTool($event.touches[0])"
       @mousedown.left="
         (isPrimaryActive = true), (isSecondaryActive = false), onTool($event)
@@ -29,7 +29,11 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "@nuxtjs/composition-api";
 
-import { ClientCoordinates, getRelativeCoordinates } from "~/utils";
+import {
+  ClientCoordinates,
+  getDevicePixels,
+  getRelativeCoordinates,
+} from "~/utils";
 import { useUniverseStore } from "~/store";
 import { useOnResize } from "~/composables";
 import { theme } from "~/tailwind.config";
@@ -49,9 +53,9 @@ export default defineComponent({
       if (canvasWrapperElement.value && canvasElement.value) {
         universeStore.universe = new Universe(
           canvasElement.value,
-          canvasWrapperElement.value.clientWidth,
-          canvasWrapperElement.value.clientHeight,
-          universeStore.config.cellSize,
+          getDevicePixels(canvasWrapperElement.value.clientWidth),
+          getDevicePixels(canvasWrapperElement.value.clientHeight),
+          getDevicePixels(universeStore.config.cellSize),
           theme.colors.white
         );
       }
@@ -60,8 +64,8 @@ export default defineComponent({
     useOnResize(() => {
       if (canvasWrapperElement.value)
         universeStore.universe?.setSize(
-          canvasWrapperElement.value.clientWidth,
-          canvasWrapperElement.value.clientHeight
+          getDevicePixels(canvasWrapperElement.value.clientWidth),
+          getDevicePixels(canvasWrapperElement.value.clientHeight)
         );
     });
 
@@ -69,6 +73,9 @@ export default defineComponent({
     const isPrimaryActive = ref(false);
     const isSecondaryActive = ref(false);
     const runToolAt = (x: number, y: number) => {
+      x = getDevicePixels(x);
+      y = getDevicePixels(y);
+
       if (isPrimaryActive.value)
         universeStore.areToolsSwitched
           ? universeStore.universe?.killCellAt(x, y)
