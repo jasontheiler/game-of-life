@@ -23,6 +23,7 @@ pub struct Universe {
     cells: Vec<Cell>,
     next_cells: Vec<Cell>,
     cell_size: u32,
+    cell_color: String,
     offset_x: u32,
     offset_y: u32,
 }
@@ -73,6 +74,7 @@ impl Universe {
             cells,
             next_cells,
             cell_size,
+            cell_color,
             offset_x,
             offset_y,
         }
@@ -93,6 +95,7 @@ impl Universe {
     pub fn set_size(&mut self, width: u32, height: u32) {
         self.canvas.set_width(width);
         self.canvas.set_height(height);
+        self.ctx.set_fill_style(&JsValue::from(&self.cell_color));
         self.rows = height / self.cell_size;
         self.cols = width / self.cell_size;
         self.cells = vec![Cell::Dead; (self.rows * self.cols) as usize];
