@@ -1,4 +1,4 @@
-import { watch, watchEffect } from "@nuxtjs/composition-api";
+import { watch } from "@nuxtjs/composition-api";
 import { defineStore } from "pinia";
 
 import { getDevicePixels } from "~/utils";
@@ -31,8 +31,10 @@ export const useUniverseStore = defineStore({
           this.universe?.setCellSize(getDevicePixels(nextCellSize));
         }
       );
-      watchEffect(() =>
-        localStorage.setItem("universeConfig", JSON.stringify(this.config))
+      watch(
+        () => this.config,
+        (nextConfig) =>
+          localStorage.setItem("universeConfig", JSON.stringify(nextConfig))
       );
     },
 
