@@ -1,22 +1,18 @@
 <template>
   <div class="relative">
-    <div
-      v-if="label"
-      class="
-        -mb-3
-        text-left text-3xl text-white
-        whitespace-nowrap
-        select-none
-      "
+    <label
+      :for="id"
+      class="-mb-3 text-left text-3xl whitespace-nowrap select-none"
     >
       {{ label }}
-    </div>
+    </label>
 
     <input
+      :id="id"
       :min="min"
       :max="max"
       :step="step"
-      :value="innerValue"
+      :value="value"
       type="range"
       class="
         appearance-none
@@ -31,7 +27,7 @@
         duration-100
         cursor-pointer
       "
-      @input="onInput"
+      @input="({ target }) => $emit('input', parseFloat(target.value))"
     />
 
     <div
@@ -42,21 +38,24 @@
         select-none
       "
     >
-      {{ innerValue }}{{ unit }}
+      {{ value }}{{ unit }}
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "@nuxtjs/composition-api";
-
-import { debounce } from "~/utils";
+import { defineComponent, PropType } from "@nuxtjs/composition-api";
 
 export default defineComponent({
   props: {
     value: {
       type: Number as PropType<number>,
       required: true,
+    },
+
+    id: {
+      type: String as PropType<string>,
+      required: false,
     },
 
     label: {
@@ -86,33 +85,6 @@ export default defineComponent({
       required: false,
       default: 1,
     },
-
-    isLazy: {
-      type: Boolean as PropType<boolean>,
-      required: false,
-      default: false,
-    },
-  },
-
-  setup(props, { emit }) {
-    const { isLazy, value } = props;
-
-    const innerValue = ref(value);
-
-    const debouncedEmit = debounce(emit);
-
-    const onInput = ({ target }: InputEvent) => {
-      innerValue.value = parseFloat((target as any)?.value);
-
-      isLazy
-        ? debouncedEmit("input", innerValue.value)
-        : emit("input", innerValue.value);
-    };
-
-    return {
-      innerValue,
-      onInput,
-    };
   },
 });
 </script>
