@@ -1,2 +1,2 @@
 export * from "./getDevicePixels";
-export * from "./getRelativeCoordinates";
+export * from "./getPositionInElement";

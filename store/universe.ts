@@ -1,5 +1,6 @@
 import { watch } from "@nuxtjs/composition-api";
 import { defineStore } from "pinia";
+import { useLocalStorage } from "@vueuse/core";
 
 import { getDevicePixels } from "~/utils";
 
@@ -21,8 +22,7 @@ export const useUniverseStore = defineStore({
 
   actions: {
     init() {
-      const config = localStorage.getItem("universeConfig");
-      if (config) this.config = JSON.parse(config);
+      this.config = useLocalStorage("universeConfig", this.config).value;
 
       watch(
         () => this.config.cellSize,
@@ -30,11 +30,6 @@ export const useUniverseStore = defineStore({
           this.stop();
           this.universe?.setCellSize(getDevicePixels(nextCellSize));
         }
-      );
-      watch(
-        () => this.config,
-        (nextConfig) =>
-          localStorage.setItem("universeConfig", JSON.stringify(nextConfig))
       );
     },
 

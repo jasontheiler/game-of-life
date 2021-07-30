@@ -66,6 +66,7 @@ const config: NuxtConfig = {
     plugins: [
       new WasmPackPlugin({
         crateDirectory: resolve(__dirname, "./wasm/universe"),
+        forceMode: "production",
         outDir: resolve(__dirname, "./wasm/universe/pkg"),
       }),
     ],
@@ -82,7 +83,7 @@ const config: NuxtConfig = {
   fontawesome: {
     icons: {
       solid: [
-        "faChevronUp",
+        "faEllipsisH",
         "faUndoAlt",
         "faPlay",
         "faPause",

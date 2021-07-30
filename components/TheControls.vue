@@ -1,5 +1,5 @@
 <template>
-  <section
+  <div
     class="
       w-full
       xl:w-auto
@@ -25,7 +25,7 @@
     />
 
     <TheToolSwitch v-model="universeStore.areToolsSwitched" />
-  </section>
+  </div>
 </template>
 
 <script lang="ts">

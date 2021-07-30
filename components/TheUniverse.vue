@@ -1,125 +1,109 @@
 <template>
-  <div ref="canvasWrapperElement" class="w-full h-full">
-    <canvas
-      ref="canvasElement"
-      class="w-full h-full cursor-pointer"
-      @touchstart.prevent="(isPrimaryActive = true), onTool($event.touches[0])"
-      @mousedown.left="
-        (isPrimaryActive = true), (isSecondaryActive = false), onTool($event)
-      "
-      @mousedown.right="
-        (isSecondaryActive = true), (isPrimaryActive = false), onTool($event)
-      "
-      @touchmove.prevent="isPrimaryActive && onTool($event.touches[0])"
-      @mousemove="(isPrimaryActive || isSecondaryActive) && onTool($event)"
-      @touchcancel.prevent="(prevCoordinates = null), (isPrimaryActive = false)"
-      @touchend.prevent="(prevCoordinates = null), (isPrimaryActive = false)"
-      @mouseout="
-        (prevCoordinates = null),
-          (isPrimaryActive = false),
-          (isSecondaryActive = false)
-      "
-      @mouseup.left="(prevCoordinates = null), (isPrimaryActive = false)"
-      @mouseup.right="(prevCoordinates = null), (isSecondaryActive = false)"
-      @contextmenu.prevent
-    />
-  </div>
+  <canvas
+    ref="canvas"
+    class="w-full h-full cursor-pointer"
+    @touchstart.prevent="(presses = [true, false]), onPress($event.touches[0])"
+    @mousedown.left="(presses = [true, false]), onPress($event)"
+    @mousedown.right="(presses = [false, true]), onPress($event)"
+    @touchmove.prevent="onPress($event.touches[0])"
+    @mousemove="onPress($event)"
+    @touchcancel.prevent="(presses = [false, false]), (prevPosition = null)"
+    @touchend.prevent="(presses = [false, false]), (prevPosition = null)"
+    @mouseout="(presses = [false, false]), (prevPosition = null)"
+    @mouseup="(presses = [false, false]), (prevPosition = null)"
+    @contextmenu.prevent
+  />
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "@nuxtjs/composition-api";
+import { templateRef, useEventListener } from "@vueuse/core";
 
-import {
-  ClientCoordinates,
-  getDevicePixels,
-  getRelativeCoordinates,
-} from "~/utils";
+import { getDevicePixels, getPositionInElement } from "~/utils";
 import { useUniverseStore } from "~/store";
-import { useOnResize } from "~/composables";
 import { theme } from "~/tailwind.config";
 
 export default defineComponent({
   setup() {
     const universeStore = useUniverseStore();
+    onMounted(() => universeStore.init());
 
-    const canvasWrapperElement = ref<HTMLDivElement>();
-    const canvasElement = ref<HTMLCanvasElement>();
+    const canvasElement = templateRef<HTMLCanvasElement>("canvas");
 
     onMounted(async () => {
-      universeStore.init();
-
       const { Universe } = await import("~/wasm/universe/pkg");
 
-      if (canvasWrapperElement.value && canvasElement.value) {
+      if (canvasElement.value) {
+        const { clientWidth, clientHeight } = canvasElement.value;
+
         universeStore.universe = new Universe(
           canvasElement.value,
-          getDevicePixels(canvasWrapperElement.value.clientWidth),
-          getDevicePixels(canvasWrapperElement.value.clientHeight),
+          getDevicePixels(clientWidth),
+          getDevicePixels(clientHeight),
           getDevicePixels(universeStore.config.cellSize),
           theme.colors.white
         );
       }
     });
 
-    useOnResize(() => {
-      if (canvasWrapperElement.value)
-        universeStore.universe?.setSize(
-          getDevicePixels(canvasWrapperElement.value.clientWidth),
-          getDevicePixels(canvasWrapperElement.value.clientHeight)
-        );
+    useEventListener("resize", () => {
+      const { clientWidth, clientHeight } = canvasElement.value;
+
+      universeStore.universe?.setSize(
+        getDevicePixels(clientWidth),
+        getDevicePixels(clientHeight)
+      );
     });
 
-    const prevCoordinates = ref<{ prevX: number; prevY: number } | null>(null);
-    const isPrimaryActive = ref(false);
-    const isSecondaryActive = ref(false);
-    const runToolAt = (x: number, y: number) => {
+    const presses = ref([false, false]);
+
+    const changeCellAt = (x: number, y: number) => {
       x = getDevicePixels(x);
       y = getDevicePixels(y);
 
-      if (isPrimaryActive.value)
+      if (presses.value[0])
         universeStore.areToolsSwitched
           ? universeStore.universe?.killCellAt(x, y)
           : universeStore.universe?.reviveCellAt(x, y);
-      if (isSecondaryActive.value)
+      if (presses.value[1])
         universeStore.areToolsSwitched
           ? universeStore.universe?.reviveCellAt(x, y)
           : universeStore.universe?.killCellAt(x, y);
     };
-    const onTool = (clientCoordinates: ClientCoordinates) => {
-      if (canvasElement.value) {
-        const { relativeX, relativeY } = getRelativeCoordinates(
-          canvasElement.value,
-          clientCoordinates
-        );
 
-        if (prevCoordinates.value) {
-          const { prevX, prevY } = prevCoordinates.value;
-          const vecX = relativeX - prevX;
-          const vecY = relativeY - prevY;
-          const vecLength = Math.sqrt(vecX ** 2 + vecY ** 2);
-          const maxPoints = vecLength / universeStore.config.cellSize;
+    const prevPosition = ref<[number, number] | null>(null);
 
-          for (let i = 1; i < maxPoints; i++) {
-            const pointX = prevX + Math.floor(vecX * (i / maxPoints));
-            const pointY = prevY + Math.floor(vecY * (i / maxPoints));
+    const onPress = ({ clientX, clientY }: MouseEvent | Touch) => {
+      const [x, y] = getPositionInElement(canvasElement.value, [
+        clientX,
+        clientY,
+      ]);
 
-            runToolAt(pointX, pointY);
-          }
+      if (prevPosition.value) {
+        const [prevX, prevY] = prevPosition.value;
+
+        const vecX = x - prevX;
+        const vecY = y - prevY;
+        const vecLength = Math.sqrt(vecX ** 2 + vecY ** 2);
+        const points = vecLength / universeStore.config.cellSize;
+
+        for (let i = 1; i < points; i++) {
+          const pointX = prevX + Math.floor(vecX * (i / points));
+          const pointY = prevY + Math.floor(vecY * (i / points));
+
+          changeCellAt(pointX, pointY);
         }
-
-        prevCoordinates.value = { prevX: relativeX, prevY: relativeY };
-
-        runToolAt(relativeX, relativeY);
       }
+
+      changeCellAt(x, y);
+
+      prevPosition.value = [x, y];
     };
 
     return {
-      canvasWrapperElement,
-      canvasElement,
-      prevCoordinates,
-      isPrimaryActive,
-      isSecondaryActive,
-      onTool,
+      presses,
+      prevPosition,
+      onPress,
     };
   },
 });
