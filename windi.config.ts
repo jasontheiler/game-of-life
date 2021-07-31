@@ -1,4 +1,5 @@
 import { defineConfig, transform } from "windicss/helpers";
+import defaultTheme from "windicss/defaultTheme";
 
 // Windi CSS configuration
 // See: https://windicss.org/guide/configuration.html
@@ -19,10 +20,8 @@ export default defineConfig({
       purple: "#D6AAFF",
     },
 
-    extend: {
-      fontFamily: {
-        body: ["'Roboto Mono'"],
-      },
+    fontFamily: {
+      sans: ["'Roboto Mono'", ...defaultTheme.fontFamily.sans],
     },
   },
 });
