@@ -21,7 +21,6 @@ import { templateRef, useEventListener } from "@vueuse/core";
 
 import { getDevicePixels, getPositionInElement } from "~/utils";
 import { useUniverseStore } from "~/store";
-import { theme } from "~/tailwind.config";
 
 export default defineComponent({
   setup() {
@@ -41,7 +40,7 @@ export default defineComponent({
           getDevicePixels(clientWidth),
           getDevicePixels(clientHeight),
           getDevicePixels(universeStore.config.cellSize),
-          theme.colors.white
+          "#fff"
         );
       }
     });

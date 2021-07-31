@@ -49,15 +49,15 @@ const config: NuxtConfig = {
   //   - https://nuxtjs.org/guides/configuration-glossary/configuration-modules/
   //   - https://typescript.nuxtjs.org/
   //   - https://composition-api.nuxtjs.org/
-  //   - https://pinia.esm.dev/
-  //   - https://tailwindcss.nuxtjs.org/
   //   - https://github.com/nuxt-community/fontawesome-module
+  //   - https://pinia.esm.dev/
+  //   - https://windicss.org/
   buildModules: [
     "@nuxt/typescript-build",
     "@nuxtjs/composition-api/module",
-    "pinia/nuxt",
-    "@nuxtjs/tailwindcss",
     "@nuxtjs/fontawesome",
+    "pinia/nuxt",
+    "nuxt-windicss",
   ],
 
   // Build configuration
