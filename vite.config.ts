@@ -1,10 +1,11 @@
 import path from "path";
 import { defineConfig } from "vite";
-import ViteComponents from "vite-plugin-components";
 import { VitePWA } from "vite-plugin-pwa";
+import ViteComponents from "vite-plugin-components";
+import ViteIcons, { ViteIconsResolver } from "vite-plugin-icons";
 import ViteRsw from "vite-plugin-rsw";
+import ViteWindiCSS from "vite-plugin-windicss";
 import Vue from "@vitejs/plugin-vue";
-import WindiCSS from "vite-plugin-windicss";
 
 // Vite configuration
 // See: https://vitejs.dev/config/
@@ -16,10 +17,6 @@ export default defineConfig({
   },
 
   plugins: [
-    ViteComponents({
-      directoryAsNamespace: true,
-      globalComponentsDeclaration: true,
-    }),
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
@@ -31,12 +28,18 @@ export default defineConfig({
         background_color: "#0f172a",
       },
     }),
+    ViteComponents({
+      directoryAsNamespace: true,
+      globalComponentsDeclaration: true,
+      customComponentResolvers: [ViteIconsResolver()],
+    }),
+    ViteIcons(),
     ViteRsw({
       cli: "pnpm",
       root: "./src/wasm",
       crates: ["universe"],
     }),
+    ViteWindiCSS(),
     Vue(),
-    WindiCSS(),
   ],
 });

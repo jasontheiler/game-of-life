@@ -1,45 +1,31 @@
 <script setup lang="ts">
+import { useToggle } from "@vueuse/core";
+
 import { useUniverseStore } from "~/store";
 
 const universeStore = useUniverseStore();
 
 const isOpen = ref(false);
+const toggleOpen = useToggle(isOpen);
 </script>
 
 <template>
-  <div class="relative flex flex-col xl:flex-row justify-center items-center">
+  <div class="relative flex flex-col justify-center items-center xl:(flex-row)">
     <button
-      class="
-        w-full
-        xl:w-auto xl:h-full
-        flex
-        justify-center
-        items-center
-        text-lg
-      "
-      @click="isOpen = !isOpen"
+      class="w-full flex justify-center items-center text-lg xl:(w-auto h-auto)"
+      @click="toggleOpen()"
     >
-      <!-- <FontAwesomeIcon icon="ellipsis-h" class="m-2 xl:rotate-90" /> -->
+      <IFaSolidEllipsisH class="m-2 transform-gpu xl:(rotate-90)" />
     </button>
 
     <Transition>
       <div
         v-if="isOpen"
-        class="
-          left-0
-          xl:left-auto
-          right-0
-          xl:top-0
-          bottom-0
-          xl:w-96
-          h-full
-          xl:h-auto
-          overflow-hidden
-        "
+        class="left-0 right-0 bottom-0 h-full overflow-hidden xl:(left-auto top-0 w-96 h-auto)"
       >
-        <div class="xl:w-96">
+        <div class="xl:(w-96)">
           <AppSlider
-            v-model="universeStore.config.cellSize"
+            v-model.number="universeStore.config.cellSize"
             :min="1"
             :max="24"
             id="cell-size"

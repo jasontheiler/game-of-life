@@ -5,9 +5,23 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppIconButton: typeof import('./src/components/app/IconButton.vue')['default']
     AppSlider: typeof import('./src/components/app/Slider.vue')['default']
+    ICarbonAccessibility: typeof import('virtual:vite-icons/carbon/accessibility')['default']
+    IFaRegularSquare: typeof import('virtual:vite-icons/fa-regular/square')['default']
+    IFaSolidEllipsisH: typeof import('virtual:vite-icons/fa-solid/ellipsis-h')['default']
+    IFaSolidPaintBrush: typeof import('virtual:vite-icons/fa-solid/paint-brush')['default']
+    IFaSolidPause: typeof import('virtual:vite-icons/fa-solid/pause')['default']
+    IFaSolidPlay: typeof import('virtual:vite-icons/fa-solid/play')['default']
+    IFaSolidSquare: typeof import('virtual:vite-icons/fa-solid/square')['default']
+    IFaSolidUndoAlt: typeof import('virtual:vite-icons/fa-solid/undo-alt')['default']
+    IPhEraserDuotone: typeof import('virtual:vite-icons/ph/eraser-duotone')['default']
+    IPhEraserFill: typeof import('virtual:vite-icons/ph/eraser-fill')['default']
+    IPhPencilSimpleDuotone: typeof import('virtual:vite-icons/ph/pencil-simple-duotone')['default']
+    ISiGlyphSquare: typeof import('virtual:vite-icons/si-glyph/square')['default']
+    ISiGlyphSquareDashed1: typeof import('virtual:vite-icons/si-glyph/square-dashed1')['default']
     TheControls: typeof import('./src/components/TheControls.vue')['default']
     TheDrawer: typeof import('./src/components/TheDrawer.vue')['default']
     TheToolSwitch: typeof import('./src/components/TheToolSwitch.vue')['default']
+    TheToolToggle: typeof import('./src/components/TheToolToggle.vue')['default']
     TheUniverse: typeof import('./src/components/TheUniverse.vue')['default']
   }
 }

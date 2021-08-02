@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { templateRef, useEventListener } from "@vueuse/core";
+import { useEventListener } from "@vueuse/core";
 
 import { getDevicePixels, getPositionInElement } from "~/utils";
 import { useUniverseStore } from "~/store";
@@ -8,9 +8,11 @@ import initUniverse, { Universe } from "~/wasm/universe/pkg";
 const universeStore = useUniverseStore();
 onMounted(() => universeStore.init());
 
-const canvasElement = templateRef<HTMLCanvasElement>("canvas");
+const canvasElement = ref<HTMLCanvasElement>();
 
 onMounted(async () => {
+  if (!canvasElement.value) return;
+
   await initUniverse();
 
   const { clientWidth, clientHeight } = canvasElement.value;
@@ -25,6 +27,8 @@ onMounted(async () => {
 });
 
 useEventListener("resize", () => {
+  if (!canvasElement.value) return;
+
   const { clientWidth, clientHeight } = canvasElement.value;
 
   universeStore.universe?.setSize(
@@ -52,6 +56,8 @@ const changeCellAt = (x: number, y: number) => {
 const prevPosition = ref<[number, number] | null>(null);
 
 const onPress = ({ clientX, clientY }: MouseEvent | Touch) => {
+  if (!canvasElement.value) return;
+
   const [x, y] = getPositionInElement(canvasElement.value, [clientX, clientY]);
 
   if (prevPosition.value) {
@@ -78,7 +84,7 @@ const onPress = ({ clientX, clientY }: MouseEvent | Touch) => {
 
 <template>
   <canvas
-    ref="canvas"
+    ref="canvasElement"
     class="w-full h-full cursor-pointer"
     @touchstart.prevent="(presses = [true, false]), onPress($event.touches[0])"
     @mousedown.left="(presses = [true, false]), onPress($event)"

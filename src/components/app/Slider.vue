@@ -1,22 +1,24 @@
 <script setup lang="ts">
+import { useVModel } from "@vueuse/core";
+
 const props = defineProps({
-  value: Number,
-  id: String,
-  label: String,
+  modelValue: {
+    type: Number,
+    required: true,
+  },
+  id: {
+    type: String,
+    required: true,
+  },
+  label: {
+    type: String,
+    required: true,
+  },
   unit: String,
-  min: {
-    type: Number,
-    default: 0,
-  },
-  max: {
-    type: Number,
-    default: 100,
-  },
-  step: {
-    type: Number,
-    default: 1,
-  },
 });
+const emit = defineEmits(["update:modelValue"]);
+
+const value = useVModel(props, "modelValue", emit);
 </script>
 
 <template>
@@ -29,36 +31,17 @@ const props = defineProps({
     </label>
 
     <input
+      v-model="value"
+      v-bind="$attrs"
       :id="id"
-      :min="min"
-      :max="max"
-      :step="step"
-      :value="value"
       type="range"
-      class="
-        appearance-none
-        w-full
-        h-2
-        rounded-full
-        bg-black bg-opacity-10
-        hover:bg-opacity-20
-        shadow-inner
-        focus-visible:outline-none focus-visible:ring focus-visible:ring-current
-        transition-shadow
-        duration-100
-        cursor-pointer
-      "
+      class="appearance-none w-full h-2 rounded-full bg-black bg-opacity-10 shadow-inner transition-shadow duration-100 cursor-pointer hover:(bg-opacity-20) focus-visible:(outline-none ring ring-current)"
     />
 
     <div
-      class="
-        -mt-2
-        text-right text-3xl text-blueGray-600
-        whitespace-nowrap
-        select-none
-      "
+      class="-mt-2 text-right text-3xl text-blueGray-600 whitespace-nowrap select-none"
     >
-      {{ props.value }}{{ props.unit }}
+      {{ props.modelValue }}{{ props.unit }}
     </div>
   </div>
 </template>

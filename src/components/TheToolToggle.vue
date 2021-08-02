@@ -1,52 +1,38 @@
 <script setup lang="ts">
+import { useToggle, useVModel } from "@vueuse/core";
+
 const props = defineProps({
-  value: Boolean,
+  modelValue: {
+    type: Boolean,
+    required: true,
+  },
 });
+const emit = defineEmits(["update:modelValue"]);
+
+const value = useVModel(props, "modelValue", emit);
+const toggleValue = useToggle(value);
 </script>
 
 <template>
   <button
-    class="
-      w-[5.5rem]
-      xl:w-12
-      h-12
-      xl:h-[5.5rem]
-      -m-6
-      rounded-full
-      nm-concave-green-lg
-      active:nm-inset-green-lg
-      focus-visible:outline-none
-    "
-    @click="$emit('input', !props.value)"
+    class="group w-22 h-12 -m-6 rounded-full nm-concave-green-lg active:(nm-inset-green-lg) xl:(w-12 h-22)"
+    @click="toggleValue()"
   >
     <div
-      class="
-        relative
-        w-full
-        h-full
-        p-1
-        rounded-full
-        flex
-        xl:flex-col
-        justify-around
-        items-center
-        group-focus-visible:ring-4 group-focus-visible:ring-current
-        transition-shadow
-        duration-100
-      "
+      class="relative w-full h-full p-1 rounded-full flex justify-around items-center text-sm transition-shadow duration-100 group-focus-visible:(ring-4 ring-current) xl:(flex-col)"
     >
       <div
         :class="[
-          props.value
-            ? 'left-1/2 xl:left-1 right-1 top-1 xl:top-1/2 bottom-1 activate'
-            : 'left-1 right-1/2 xl:right-1 top-1 bottom-1 xl:bottom-1/2 deactivate',
+          value
+            ? 'left-1/2 right-1 top-1 bottom-1 activate xl:(left-1 top-1/2)'
+            : 'left-1 right-1/2 top-1 bottom-1 deactivate xl:(right-1 bottom-1/2)',
         ]"
         class="absolute z-0 rounded-full bg-purple shadow-md"
       />
 
-      <!-- <FontAwesomeIcon icon="paint-brush" class="z-10" /> -->
+      <IFaSolidSquare class="z-10" />
 
-      <!-- <FontAwesomeIcon icon="eraser" class="z-10" /> -->
+      <IFaRegularSquare class="z-10" />
     </div>
   </button>
 </template>

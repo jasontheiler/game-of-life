@@ -9,6 +9,10 @@
 </template>
 
 <style>
+*:focus {
+  @apply !outline-none;
+}
+
 body {
   @apply bg-green text-gray;
   -webkit-tap-highlight-color: transparent;

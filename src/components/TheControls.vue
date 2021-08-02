@@ -6,30 +6,23 @@ const universeStore = useUniverseStore();
 
 <template>
   <div
-    class="
-      w-full
-      xl:w-auto
-      max-w-[32rem]
-      xl:h-full xl:max-h-[32rem]
-      mx-auto
-      xl:my-auto
-      p-6
-      flex
-      xl:flex-col
-      justify-around
-      items-center
-    "
+    class="w-full max-w-128 mx-auto p-6 flex justify-around items-center xl:(w-auto h-full max-h-128 my-auto flex-col)"
   >
-    <AppIconButton icon="undo-alt" @click="universeStore.reset()" />
+    <AppIconButton @click="universeStore.reset()">
+      <IFaSolidUndoAlt />
+    </AppIconButton>
 
     <AppIconButton
-      :icon="universeStore.isRunning ? 'pause' : 'play'"
       size="lg"
       @click="
         universeStore.isRunning ? universeStore.stop() : universeStore.start()
       "
-    />
+    >
+      <IFaSolidPause v-if="universeStore.isRunning" />
 
-    <TheToolSwitch v-model="universeStore.areToolsSwitched" />
+      <IFaSolidPlay v-else />
+    </AppIconButton>
+
+    <TheToolToggle v-model="universeStore.areToolsSwitched" />
   </div>
 </template>
