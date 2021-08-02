@@ -2,7 +2,7 @@
   <div class="w-full h-screen flex flex-col-reverse xl:flex-row-reverse">
     <TheControls />
 
-    <TheDrawer />
+    <TheConfiguration />
 
     <TheUniverse class="bg-gray shadow" />
   </div>
