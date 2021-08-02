@@ -1,3 +1,24 @@
+<script setup lang="ts">
+const props = defineProps({
+  value: Number,
+  id: String,
+  label: String,
+  unit: String,
+  min: {
+    type: Number,
+    default: 0,
+  },
+  max: {
+    type: Number,
+    default: 100,
+  },
+  step: {
+    type: Number,
+    default: 1,
+  },
+});
+</script>
+
 <template>
   <div class="relative">
     <label
@@ -27,7 +48,6 @@
         duration-100
         cursor-pointer
       "
-      @input="({ target }) => $emit('input', parseFloat(target.value))"
     />
 
     <div
@@ -38,56 +58,10 @@
         select-none
       "
     >
-      {{ value }}{{ unit }}
+      {{ props.value }}{{ props.unit }}
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, PropType } from "@nuxtjs/composition-api";
-
-export default defineComponent({
-  props: {
-    value: {
-      type: Number as PropType<number>,
-      required: true,
-    },
-
-    id: {
-      type: String as PropType<string>,
-      required: false,
-    },
-
-    label: {
-      type: String as PropType<string>,
-      required: false,
-    },
-
-    unit: {
-      type: String as PropType<string>,
-      required: false,
-    },
-
-    min: {
-      type: Number as PropType<number>,
-      required: false,
-      default: 0,
-    },
-
-    max: {
-      type: Number as PropType<number>,
-      required: false,
-      default: 100,
-    },
-
-    step: {
-      type: Number as PropType<number>,
-      required: false,
-      default: 1,
-    },
-  },
-});
-</script>
 
 <style scoped>
 input[type="range"]::-webkit-slider-thumb {

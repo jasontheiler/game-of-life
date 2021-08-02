@@ -1,3 +1,11 @@
+<script setup lang="ts">
+import { useUniverseStore } from "~/store";
+
+const universeStore = useUniverseStore();
+
+const isOpen = ref(false);
+</script>
+
 <template>
   <div class="relative flex flex-col xl:flex-row justify-center items-center">
     <button
@@ -11,7 +19,7 @@
       "
       @click="isOpen = !isOpen"
     >
-      <FontAwesomeIcon icon="ellipsis-h" class="m-2 xl:rotate-90" />
+      <!-- <FontAwesomeIcon icon="ellipsis-h" class="m-2 xl:rotate-90" /> -->
     </button>
 
     <Transition>
@@ -43,22 +51,3 @@
     </Transition>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, ref } from "@nuxtjs/composition-api";
-
-import { useUniverseStore } from "~/store";
-
-export default defineComponent({
-  setup() {
-    const universeStore = useUniverseStore();
-
-    const isOpen = ref(false);
-
-    return {
-      universeStore,
-      isOpen,
-    };
-  },
-});
-</script>

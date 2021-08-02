@@ -1,3 +1,9 @@
+<script setup lang="ts">
+import { useUniverseStore } from "~/store";
+
+const universeStore = useUniverseStore();
+</script>
+
 <template>
   <div
     class="
@@ -27,19 +33,3 @@
     <TheToolSwitch v-model="universeStore.areToolsSwitched" />
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "@nuxtjs/composition-api";
-
-import { useUniverseStore } from "~/store";
-
-export default defineComponent({
-  setup() {
-    const universeStore = useUniverseStore();
-
-    return {
-      universeStore,
-    };
-  },
-});
-</script>

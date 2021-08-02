@@ -1,4 +1,3 @@
-import { watch } from "@nuxtjs/composition-api";
 import { defineStore } from "pinia";
 import { useLocalStorage } from "@vueuse/core";
 

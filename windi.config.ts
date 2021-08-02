@@ -14,10 +14,10 @@ export default defineConfig({
       current: "currentColor",
       transparent: "transparent",
       black: "#000000",
-      white: "#FFFFFF",
-      gray: "#0B1015",
-      green: "#41B883",
-      purple: "#D6AAFF",
+      white: "#ffffff",
+      gray: "#0b1015",
+      green: "#41b883",
+      purple: "#a6aaff",
     },
 
     fontFamily: {

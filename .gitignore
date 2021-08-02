@@ -1,6 +1,5 @@
-.nuxt
 .vscode
 dist
 node_modules
-sw.*
-.env
+*.local
+.DS_Store

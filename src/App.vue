@@ -8,6 +8,13 @@
   </div>
 </template>
 
+<style>
+body {
+  @apply bg-green text-gray;
+  -webkit-tap-highlight-color: transparent;
+}
+</style>
+
 <style scoped>
 .shadow {
   box-shadow: 0 0 32px #000000;

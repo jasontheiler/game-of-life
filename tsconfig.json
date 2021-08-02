@@ -1,23 +1,18 @@
 {
   "compilerOptions": {
-    "target": "ES2018",
+    "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Node",
-    "esModuleInterop": true,
+    "lib": ["ESNext", "DOM"],
     "strict": true,
-    "sourceMap": true,
-    "noEmit": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./*"],
-      "@/*": ["./*"]
+      "~/*": ["./src/*"]
     },
-    "lib": ["ESNext", "ESNext.AsyncIterable", "DOM"],
-    "types": [
-      "@types/node",
-      "@nuxt/types",
-      "pinia/nuxt/types"
-    ]
+    "types": ["vite/client"]
   },
-  "exclude": ["./.nuxt", "./dist", "./node_modules"]
+  "exclude": ["./dist", "./node_modules"]
 }

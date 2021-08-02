@@ -1,6 +1,5 @@
-.nuxt
 dist
 node_modules
 wasm
-sw.*
-package-lock.json
+components.d.ts
+pnpm-lock.yaml

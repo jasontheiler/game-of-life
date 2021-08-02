@@ -1,0 +1,5 @@
+{
+  "cli": "pnpm",
+  "root": "./src/wasm",
+  "crates": ["universe"]
+}

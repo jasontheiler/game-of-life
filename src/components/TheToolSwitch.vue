@@ -1,3 +1,9 @@
+<script setup lang="ts">
+const props = defineProps({
+  value: Boolean,
+});
+</script>
+
 <template>
   <button
     class="
@@ -11,7 +17,7 @@
       active:nm-inset-green-lg
       focus-visible:outline-none
     "
-    @click="$emit('input', !value)"
+    @click="$emit('input', !props.value)"
   >
     <div
       class="
@@ -31,32 +37,19 @@
     >
       <div
         :class="[
-          value
+          props.value
             ? 'left-1/2 xl:left-1 right-1 top-1 xl:top-1/2 bottom-1 activate'
             : 'left-1 right-1/2 xl:right-1 top-1 bottom-1 xl:bottom-1/2 deactivate',
         ]"
         class="absolute z-0 rounded-full bg-purple shadow-md"
       />
 
-      <FontAwesomeIcon icon="paint-brush" class="z-10" />
+      <!-- <FontAwesomeIcon icon="paint-brush" class="z-10" /> -->
 
-      <FontAwesomeIcon icon="eraser" class="z-10" />
+      <!-- <FontAwesomeIcon icon="eraser" class="z-10" /> -->
     </div>
   </button>
 </template>
-
-<script lang="ts">
-import { defineComponent, PropType } from "@nuxtjs/composition-api";
-
-export default defineComponent({
-  props: {
-    value: {
-      type: Boolean as PropType<boolean>,
-      required: true,
-    },
-  },
-});
-</script>
 
 <style scoped>
 .activate {
