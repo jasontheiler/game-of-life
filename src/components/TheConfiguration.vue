@@ -12,6 +12,7 @@ const toggleOpen = useToggle(isOpen);
 <template>
   <div class="relative flex flex-col justify-center items-center xl:(flex-row)">
     <button
+      :aria-label="`${isOpen ? 'Close' : 'Open'} configuration`"
       class="w-full flex justify-center items-center text-lg xl:(w-auto h-auto)"
       @click="toggleOpen()"
     >

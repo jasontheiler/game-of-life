@@ -15,6 +15,7 @@ const toggleValue = useToggle(value);
 
 <template>
   <button
+    :aria-label="`Switch to ${value ? 'drawing' : 'erasing'} cells`"
     class="group w-22 h-12 -m-6 rounded-full nm-concave-green-lg active:(nm-inset-green-lg) xl:(w-12 h-22)"
     @click="toggleValue()"
   >
