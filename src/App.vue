@@ -1,10 +1,12 @@
 <template>
-  <div class="w-full h-screen flex flex-col-reverse xl:flex-row-reverse">
+  <TheReloadPrompt />
+
+  <div class="w-full h-screen flex flex-col-reverse xl:(flex-row-reverse)">
     <TheControls />
 
     <TheConfiguration />
 
-    <TheUniverse class="bg-gray shadow" />
+    <TheUniverse class="bg-darkGray shadow" />
   </div>
 </template>
 
@@ -14,7 +16,7 @@
 }
 
 body {
-  @apply bg-green text-gray;
+  @apply bg-green text-darkGray;
   -webkit-tap-highlight-color: transparent;
 }
 </style>

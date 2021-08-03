@@ -15,9 +15,10 @@ export default defineConfig({
       transparent: "transparent",
       black: "#000000",
       white: "#ffffff",
-      gray: "#0b1015",
+      darkGray: "#0b1015",
+      lightGray: "#1d2935",
       green: "#41b883",
-      purple: "#a6aaff",
+      purple: "#997fff",
     },
 
     fontFamily: {

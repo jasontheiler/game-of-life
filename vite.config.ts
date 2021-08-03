@@ -18,7 +18,6 @@ export default defineConfig({
 
   plugins: [
     VitePWA({
-      registerType: "autoUpdate",
       manifest: {
         name: "Conway's Game of Life",
         short_name: "Game of Life",
