@@ -6,6 +6,7 @@ declare module 'vue' {
     AppButton: typeof import('./src/components/app/Button.vue')['default']
     AppIconButton: typeof import('./src/components/app/IconButton.vue')['default']
     AppSlider: typeof import('./src/components/app/Slider.vue')['default']
+    AppToast: typeof import('./src/components/app/Toast.vue')['default']
     IFaRegularSquare: typeof import('virtual:vite-icons/fa-regular/square')['default']
     IFaSolidEllipsisH: typeof import('virtual:vite-icons/fa-solid/ellipsis-h')['default']
     IFaSolidPause: typeof import('virtual:vite-icons/fa-solid/pause')['default']
@@ -14,7 +15,7 @@ declare module 'vue' {
     IFaSolidUndoAlt: typeof import('virtual:vite-icons/fa-solid/undo-alt')['default']
     TheConfiguration: typeof import('./src/components/TheConfiguration.vue')['default']
     TheControls: typeof import('./src/components/TheControls.vue')['default']
-    TheReloadPrompt: typeof import('./src/components/TheReloadPrompt.vue')['default']
+    ThePwaToasts: typeof import('./src/components/ThePwaToasts.vue')['default']
     TheToolToggle: typeof import('./src/components/TheToolToggle.vue')['default']
     TheUniverse: typeof import('./src/components/TheUniverse.vue')['default']
   }
