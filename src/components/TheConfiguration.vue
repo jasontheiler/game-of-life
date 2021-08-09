@@ -1,30 +1,70 @@
 <script setup lang="ts">
-import { useToggle } from "@vueuse/core";
+import {
+  useBreakpoints,
+  useEventListener,
+  useToggle,
+  breakpointsTailwind,
+} from "@vueuse/core";
+import { useMotions } from "@vueuse/motion";
 
 import { useUniverseStore } from "~/store";
+
+const breakpoints = useBreakpoints(breakpointsTailwind);
+const gtXl = breakpoints.greater("xl");
+
+const motions = useMotions();
 
 const universeStore = useUniverseStore();
 
 const isOpen = ref(false);
 const toggleOpen = useToggle(isOpen);
+
+useEventListener("resize", () => (isOpen.value = false));
 </script>
 
 <template>
-  <div class="relative flex flex-col justify-center items-center xl:(flex-row)">
+  <div
+    class="flex-shrink-0 w-full flex flex-col items-center xl:(w-auto h-full flex-row)"
+  >
     <button
       :aria-label="`${isOpen ? 'Close' : 'Open'} configuration`"
-      class="w-full flex justify-center items-center text-lg xl:(w-auto h-auto)"
+      class="w-full h-8 flex justify-center items-center text-lg focus-visible:(outline-none ring-4 ring-current) xl:(w-8 h-full)"
       @click="toggleOpen()"
     >
-      <IFaSolidEllipsisH class="m-2 transform-gpu xl:(rotate-90)" />
+      <IFaSolidChevronUp
+        :class="[isOpen ? 'rotate-180 xl:(rotate-90)' : 'xl:(-rotate-90)']"
+        class="transform-gpu transition-transform duration-200"
+      />
     </button>
 
-    <Transition>
+    <Transition
+      :css="false"
+      @leave="(_, done) => motions.configuration.leave(done)"
+    >
       <div
         v-if="isOpen"
-        class="left-0 right-0 bottom-0 h-full overflow-hidden xl:(left-auto top-0 w-96 h-auto)"
+        v-motion="'configuration'"
+        :initial="{
+          width: gtXl ? '0rem' : '0%',
+          maxWidth: gtXl ? 'auto' : '0rem',
+          height: '0rem',
+        }"
+        :enter="{
+          width: gtXl ? '32rem' : '100%',
+          maxWidth: gtXl ? 'auto' : '32rem',
+          height: '8rem',
+        }"
+        :leave="{
+          width: gtXl ? '0rem' : '0%',
+          maxWidth: gtXl ? 'auto' : '0rem',
+          height: '0rem',
+          transition: {
+            ease: 'anticipate',
+          },
+        }"
+        class="w-full overflow-hidden"
       >
-        <div class="xl:(w-96)">
+        <div class="w-full h-full p-6">
           <AppSlider
             v-model.number="universeStore.config.cellSize"
             :min="1"

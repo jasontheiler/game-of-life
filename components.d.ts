@@ -8,7 +8,7 @@ declare module 'vue' {
     AppSlider: typeof import('./src/components/app/Slider.vue')['default']
     AppToast: typeof import('./src/components/app/Toast.vue')['default']
     IFaRegularSquare: typeof import('virtual:vite-icons/fa-regular/square')['default']
-    IFaSolidEllipsisH: typeof import('virtual:vite-icons/fa-solid/ellipsis-h')['default']
+    IFaSolidChevronUp: typeof import('virtual:vite-icons/fa-solid/chevron-up')['default']
     IFaSolidPause: typeof import('virtual:vite-icons/fa-solid/pause')['default']
     IFaSolidPlay: typeof import('virtual:vite-icons/fa-solid/play')['default']
     IFaSolidSquare: typeof import('virtual:vite-icons/fa-solid/square')['default']

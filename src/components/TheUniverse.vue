@@ -85,7 +85,7 @@ const onPress = ({ clientX, clientY }: MouseEvent | Touch) => {
 <template>
   <canvas
     ref="canvasElement"
-    class="w-full h-full cursor-pointer"
+    class="w-full h-full bg-darkGray shadow cursor-pointer"
     @touchstart.prevent="(presses = [true, false]), onPress($event.touches[0])"
     @mousedown.left="(presses = [true, false]), onPress($event)"
     @mousedown.right="(presses = [false, true]), onPress($event)"
@@ -98,3 +98,9 @@ const onPress = ({ clientX, clientY }: MouseEvent | Touch) => {
     @contextmenu.prevent
   />
 </template>
+
+<style scoped>
+.shadow {
+  box-shadow: 0 0 32px #000;
+}
+</style>
