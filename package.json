@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@vueuse/core": "^5.2.0",
+    "@vueuse/motion": "^1.5.6",
+    "@vueuse/shared": "^5.2.0",
     "pinia": "^2.0.0-rc.1",
     "vue": "^3.2.0-0",
     "vue-global-api": "^0.4.1"
