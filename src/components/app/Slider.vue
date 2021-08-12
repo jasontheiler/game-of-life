@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { set, useVModel } from "@vueuse/core";
+import { get, set, useVModel } from "@vueuse/core";
 import { scalePow } from "d3-scale";
 
 const props = defineProps({
@@ -39,9 +39,8 @@ const scale = computed(() =>
     .rangeRound([props.min, props.max])
 );
 
-const onInput = ({ target }: any) => {
-  value.value = scale.value(parseInt(target?.value));
-};
+const onInput = ({ target }: any) =>
+  set(value, get(scale)(parseInt(target?.value)));
 </script>
 
 <template>

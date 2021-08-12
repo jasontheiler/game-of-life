@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useLocalStorage } from "@vueuse/core";
+import { get, useLocalStorage } from "@vueuse/core";
 
 import { getDevicePixels } from "~/utils";
 import { Universe } from "~/wasm/universe/pkg";
@@ -24,15 +24,12 @@ export const useUniverseStore = defineStore({
 
   actions: {
     init() {
-      this.config = useLocalStorage("universeConfig", this.config).value;
+      this.config = get(useLocalStorage("universeConfig", this.config));
 
-      watch(
-        () => this.config.cellSize,
-        (nextCellSize) => {
-          this.isRunning = false;
-          this.universe?.setCellSize(getDevicePixels(nextCellSize));
-        }
-      );
+      watchEffect(() => {
+        this.isRunning = false;
+        this.universe?.setCellSize(getDevicePixels(this.config.cellSize));
+      });
 
       watchEffect(() => {
         clearInterval(interval);

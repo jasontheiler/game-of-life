@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  set,
   useBreakpoints,
   useEventListener,
   useToggle,
@@ -19,7 +20,7 @@ const universeStore = useUniverseStore();
 const isOpen = ref(false);
 const toggleOpen = useToggle(isOpen);
 
-useEventListener("resize", () => (isOpen.value = false));
+useEventListener("resize", () => set(isOpen, false));
 </script>
 
 <template>
