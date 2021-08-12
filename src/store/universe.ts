@@ -2,19 +2,22 @@ import { defineStore } from "pinia";
 import { useLocalStorage } from "@vueuse/core";
 
 import { getDevicePixels } from "~/utils";
+import { Universe } from "~/wasm/universe/pkg";
 
-let animationFrameHandle: number;
+let interval: number;
 
 export const useUniverseStore = defineStore({
   id: "universe",
 
   state() {
     return {
-      universe: null as any,
+      universe: null as Universe | null,
       isRunning: false,
       areToolsSwitched: false,
+      realTickrate: 0,
       config: {
         cellSize: 16,
+        targetTickrate: 30,
       },
     };
   },
@@ -26,33 +29,29 @@ export const useUniverseStore = defineStore({
       watch(
         () => this.config.cellSize,
         (nextCellSize) => {
-          this.stop();
+          this.isRunning = false;
           this.universe?.setCellSize(getDevicePixels(nextCellSize));
         }
       );
+
+      watchEffect(() => {
+        clearInterval(interval);
+
+        if (this.isRunning) {
+          interval = window.setInterval(
+            () => this.universe?.tick(),
+            1000 / this.config.targetTickrate
+          );
+        }
+      });
     },
 
-    start() {
-      if (this.isRunning) return;
-
-      const render = () => {
-        this.universe?.tick();
-        animationFrameHandle = requestAnimationFrame(render);
-      };
-
-      this.isRunning = true;
-      animationFrameHandle = requestAnimationFrame(render);
-    },
-
-    stop() {
-      if (!this.isRunning) return;
-
-      this.isRunning = false;
-      cancelAnimationFrame(animationFrameHandle);
+    toggleRunning() {
+      this.isRunning = !this.isRunning;
     },
 
     reset() {
-      this.stop();
+      this.isRunning = false;
       this.universe?.killAllCells();
     },
   },

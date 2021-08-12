@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { useVModel } from "@vueuse/core";
+import { set, useVModel } from "@vueuse/core";
+import { scalePow } from "d3-scale";
 
 const props = defineProps({
   modelValue: {
@@ -10,15 +11,37 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  min: {
+    type: Number,
+    default: 0,
+  },
+  max: {
+    type: Number,
+    default: 100,
+  },
+  scalingExponent: {
+    type: Number,
+    default: 1,
+  },
   label: {
     type: String,
     required: true,
   },
   unit: String,
 });
-const emit = defineEmits(["update:modelValue"]);
 
-const value = useVModel(props, "modelValue", emit);
+const value = useVModel(props, "modelValue");
+
+const scale = computed(() =>
+  scalePow()
+    .exponent(props.scalingExponent)
+    .domain([props.min, props.max])
+    .rangeRound([props.min, props.max])
+);
+
+const onInput = ({ target }: any) => {
+  value.value = scale.value(parseInt(target?.value));
+};
 </script>
 
 <template>
@@ -31,11 +54,14 @@ const value = useVModel(props, "modelValue", emit);
     </label>
 
     <input
-      v-model="value"
       v-bind="$attrs"
+      :value="scale.invert(value)"
       :id="id"
+      :min="min"
+      :max="max"
       type="range"
       class="appearance-none w-full h-2 rounded-full bg-black bg-opacity-10 shadow-inner transition-shadow duration-100 cursor-pointer hover:(bg-opacity-20) focus-visible:(outline-none ring ring-current)"
+      @input="onInput($event)"
     />
 
     <div

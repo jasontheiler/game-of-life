@@ -52,7 +52,7 @@ useEventListener("resize", () => (isOpen.value = false));
         :enter="{
           width: gtXl ? '32rem' : '100%',
           maxWidth: gtXl ? 'auto' : '32rem',
-          height: '8rem',
+          height: '14rem',
         }"
         :leave="{
           width: gtXl ? '0rem' : '0%',
@@ -72,6 +72,18 @@ useEventListener("resize", () => (isOpen.value = false));
             id="cell-size"
             label="cell_size"
             unit="px"
+          />
+
+          <AppSlider
+            v-model.number="universeStore.config.targetTickrate"
+            :min="1"
+            :max="1000"
+            :scaling-exponent="4"
+            :unit="`tick${
+              universeStore.config.targetTickrate === 1 ? '' : 's'
+            }/s`"
+            id="target-tickrate"
+            label="target_tickrate"
           />
         </div>
       </div>

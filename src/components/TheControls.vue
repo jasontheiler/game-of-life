@@ -15,9 +15,7 @@ const universeStore = useUniverseStore();
     <AppIconButton
       :aria-label="universeStore.isRunning ? 'Pause' : 'Play'"
       size="lg"
-      @click="
-        universeStore.isRunning ? universeStore.stop() : universeStore.start()
-      "
+      @click="universeStore.toggleRunning()"
     >
       <IFaSolidPause v-if="universeStore.isRunning" />
 

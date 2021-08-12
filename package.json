@@ -19,9 +19,11 @@
   "devDependencies": {
     "@fontsource/roboto-mono": "^4.5.0",
     "@iconify/json": "^1.1.385",
+    "@types/d3-scale": "^4.0.1",
     "@vitejs/plugin-vue": "^1.4.0",
     "@vue/compiler-sfc": "^3.2.1",
     "@windicss/plugin-interaction-variants": "^1.0.0",
+    "d3-scale": "^4.0.0",
     "lodash": "^4.17.21",
     "pnpm": "^6.12.1",
     "prettier": "~2.2.1",
