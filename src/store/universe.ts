@@ -16,6 +16,7 @@ export const useUniverseStore = defineStore({
       config: {
         cellSize: 16,
         targetFramerate: 30,
+        showFramerate: false,
       },
     };
   },
@@ -37,7 +38,12 @@ export const useUniverseStore = defineStore({
       throttledWatch(
         frameTimes,
         (nextFrameTimes) => {
-          const totalFrameTime = nextFrameTimes.reduce((a, b) => a + b, 0);
+          if (nextFrameTimes.length === 0) {
+            this.realFramerate = 0;
+            return;
+          }
+
+          const totalFrameTime = nextFrameTimes.reduce((a, b) => a + b);
           const meanFrameTime = totalFrameTime / nextFrameTimes.length;
 
           this.realFramerate = Math.round(1000 / meanFrameTime);

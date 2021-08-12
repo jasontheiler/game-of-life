@@ -53,7 +53,7 @@ useEventListener("resize", () => set(isOpen, false));
         :enter="{
           width: gtXl ? '32rem' : '100%',
           maxWidth: gtXl ? 'auto' : '32rem',
-          height: '14rem',
+          height: '16rem',
         }"
         :leave="{
           width: gtXl ? '0rem' : '0%',
@@ -83,6 +83,12 @@ useEventListener("resize", () => set(isOpen, false));
             id="target-framerate"
             label="target_framerate"
             unit="fps"
+          />
+
+          <AppCheckbox
+            v-model="universeStore.config.showFramerate"
+            id="show-framerate"
+            label="show_framerate"
           />
         </div>
       </div>

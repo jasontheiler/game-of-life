@@ -4,10 +4,12 @@
 declare module 'vue' {
   export interface GlobalComponents {
     AppButton: typeof import('./src/components/app/Button.vue')['default']
+    AppCheckbox: typeof import('./src/components/app/Checkbox.vue')['default']
     AppIconButton: typeof import('./src/components/app/IconButton.vue')['default']
     AppSlider: typeof import('./src/components/app/Slider.vue')['default']
     AppToast: typeof import('./src/components/app/Toast.vue')['default']
     IFaRegularSquare: typeof import('virtual:vite-icons/fa-regular/square')['default']
+    IFaSolidCheck: typeof import('virtual:vite-icons/fa-solid/check')['default']
     IFaSolidChevronUp: typeof import('virtual:vite-icons/fa-solid/chevron-up')['default']
     IFaSolidPause: typeof import('virtual:vite-icons/fa-solid/pause')['default']
     IFaSolidPlay: typeof import('virtual:vite-icons/fa-solid/play')['default']

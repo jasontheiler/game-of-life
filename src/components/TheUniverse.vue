@@ -83,20 +83,31 @@ const onPress = ({ clientX, clientY }: MouseEvent | Touch) => {
 </script>
 
 <template>
-  <canvas
-    ref="canvasElement"
-    class="w-full h-full bg-darkGray shadow cursor-pointer"
-    @touchstart.prevent="(presses = [true, false]), onPress($event.touches[0])"
-    @mousedown.left="(presses = [true, false]), onPress($event)"
-    @mousedown.right="(presses = [false, true]), onPress($event)"
-    @touchmove.prevent="onPress($event.touches[0])"
-    @mousemove="onPress($event)"
-    @touchcancel.prevent="(presses = [false, false]), (prevPosition = null)"
-    @touchend.prevent="(presses = [false, false]), (prevPosition = null)"
-    @mouseout="(presses = [false, false]), (prevPosition = null)"
-    @mouseup="(presses = [false, false]), (prevPosition = null)"
-    @contextmenu.prevent
-  />
+  <div class="flex-shrink-0 relative w-full h-full shadow">
+    <canvas
+      ref="canvasElement"
+      class="w-full h-full bg-darkGray cursor-pointer"
+      @touchstart.prevent="
+        (presses = [true, false]), onPress($event.touches[0])
+      "
+      @mousedown.left="(presses = [true, false]), onPress($event)"
+      @mousedown.right="(presses = [false, true]), onPress($event)"
+      @touchmove.prevent="onPress($event.touches[0])"
+      @mousemove="onPress($event)"
+      @touchcancel.prevent="(presses = [false, false]), (prevPosition = null)"
+      @touchend.prevent="(presses = [false, false]), (prevPosition = null)"
+      @mouseout="(presses = [false, false]), (prevPosition = null)"
+      @mouseup="(presses = [false, false]), (prevPosition = null)"
+      @contextmenu.prevent
+    />
+
+    <div
+      v-if="universeStore.config.showFramerate"
+      class="absolute right-4 bottom-4 px-3 py-1.5 rounded-xl bg-lightGray text-white"
+    >
+      {{ universeStore.realFramerate }}fps
+    </div>
+  </div>
 </template>
 
 <style scoped>
