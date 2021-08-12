@@ -76,15 +76,13 @@ useEventListener("resize", () => set(isOpen, false));
           />
 
           <AppSlider
-            v-model.number="universeStore.config.targetTickrate"
+            v-model.number="universeStore.config.targetFramerate"
             :min="1"
             :max="1000"
             :scaling-exponent="4"
-            :unit="`tick${
-              universeStore.config.targetTickrate === 1 ? '' : 's'
-            }/s`"
-            id="target-tickrate"
-            label="target_tickrate"
+            id="target-framerate"
+            label="target_framerate"
+            unit="fps"
           />
         </div>
       </div>

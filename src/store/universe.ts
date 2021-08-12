@@ -1,10 +1,8 @@
 import { defineStore } from "pinia";
-import { get, useLocalStorage } from "@vueuse/core";
+import { get, set, throttledWatch, useLocalStorage } from "@vueuse/core";
 
 import { getDevicePixels } from "~/utils";
 import { Universe } from "~/wasm/universe/pkg";
-
-let interval: number;
 
 export const useUniverseStore = defineStore({
   id: "universe",
@@ -14,10 +12,10 @@ export const useUniverseStore = defineStore({
       universe: null as Universe | null,
       isRunning: false,
       areToolsSwitched: false,
-      realTickrate: 0,
+      realFramerate: 0,
       config: {
         cellSize: 16,
-        targetTickrate: 30,
+        targetFramerate: 30,
       },
     };
   },
@@ -26,19 +24,47 @@ export const useUniverseStore = defineStore({
     init() {
       this.config = get(useLocalStorage("universeConfig", this.config));
 
-      watchEffect(() => {
-        this.isRunning = false;
-        this.universe?.setCellSize(getDevicePixels(this.config.cellSize));
-      });
+      watch(
+        () => this.config.cellSize,
+        (nextCellSize) => {
+          this.isRunning = false;
+          this.universe?.setCellSize(getDevicePixels(nextCellSize));
+        }
+      );
+
+      const frameTimes = ref<number[]>([]);
+
+      throttledWatch(
+        frameTimes,
+        (nextFrameTimes) => {
+          const totalFrameTime = nextFrameTimes.reduce((a, b) => a + b, 0);
+          const meanFrameTime = totalFrameTime / nextFrameTimes.length;
+
+          this.realFramerate = Math.round(1000 / meanFrameTime);
+        },
+        { throttle: 100 }
+      );
+
+      let interval: number;
 
       watchEffect(() => {
         clearInterval(interval);
+        set(frameTimes, []);
+
+        let prevTimestamp = performance.now();
 
         if (this.isRunning) {
-          interval = window.setInterval(
-            () => this.universe?.tick(),
-            1000 / this.config.targetTickrate
-          );
+          interval = window.setInterval(() => {
+            this.universe?.tick();
+
+            if (get(frameTimes).length >= 10) get(frameTimes).shift();
+
+            const timestamp = performance.now();
+
+            set(frameTimes, [...get(frameTimes), timestamp - prevTimestamp]);
+
+            prevTimestamp = timestamp;
+          }, 1000 / this.config.targetFramerate);
         }
       });
     },
