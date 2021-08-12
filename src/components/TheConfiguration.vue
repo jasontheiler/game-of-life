@@ -78,8 +78,8 @@ useEventListener("resize", () => set(isOpen, false));
           <AppSlider
             v-model.number="universeStore.config.targetFramerate"
             :min="1"
-            :max="1000"
-            :scaling-exponent="4"
+            :max="250"
+            :scaling-exponent="3"
             id="target-framerate"
             label="target_framerate"
             unit="fps"
