@@ -29,7 +29,7 @@ const motions = useMotions();
         },
       }"
       role="alert"
-      class="fixed p-4"
+      class="fixed z-10 p-4"
     >
       <div class="p-4 rounded-xl bg-lightGray shadow-xl text-white">
         <slot />
