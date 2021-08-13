@@ -17,8 +17,7 @@ const motions = useMotions();
 
 const universeStore = useUniverseStore();
 
-const isOpen = ref(false);
-const toggleOpen = useToggle(isOpen);
+const [isOpen, toggleOpen] = useToggle(false);
 
 useEventListener("resize", () => set(isOpen, false));
 </script>
