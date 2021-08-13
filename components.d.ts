@@ -17,6 +17,7 @@ declare module 'vue' {
     IFaSolidUndoAlt: typeof import('virtual:vite-icons/fa-solid/undo-alt')['default']
     TheConfiguration: typeof import('./src/components/TheConfiguration.vue')['default']
     TheControls: typeof import('./src/components/TheControls.vue')['default']
+    TheFramerateDisplay: typeof import('./src/components/TheFramerateDisplay.vue')['default']
     ThePwaToasts: typeof import('./src/components/ThePwaToasts.vue')['default']
     TheToolToggle: typeof import('./src/components/TheToolToggle.vue')['default']
     TheUniverse: typeof import('./src/components/TheUniverse.vue')['default']

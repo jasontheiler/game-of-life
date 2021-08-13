@@ -6,10 +6,6 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  id: {
-    type: String,
-    required: true,
-  },
   label: {
     type: String,
     required: true,
@@ -20,21 +16,21 @@ const value = useVModel(props, "modelValue");
 </script>
 
 <template>
-  <div class="flex flex-nowrap items-center gap-4">
-    <IFaSolidCheck class="hidden" />
-
+  <label
+    class="flex flex-nowrap items-center text-xl whitespace-nowrap cursor-pointer select-none"
+  >
     <input
       v-model="value"
-      :id="id"
       type="checkbox"
-      class="appearance-none relative w-6 h-6 rounded nm-convex-green cursor-pointer checked:(nm-inset-green) focus-visible:(outline-none ring ring-current)"
+      class="w-0 h-0 pointer-events-none active:sibling:(nm-inset-green) focus-visible:sibling:(outline-none ring ring-current)"
     />
 
-    <label
-      :for="id"
-      class="text-xl whitespace-nowrap cursor-pointer select-none"
+    <div
+      class="w-6 h-6 mr-3 flex justify-center items-center rounded-lg nm-concave-green-lg text-sm"
     >
-      {{ label }}
-    </label>
-  </div>
+      <IFaSolidCheck v-if="value" />
+    </div>
+
+    {{ label }}
+  </label>
 </template>

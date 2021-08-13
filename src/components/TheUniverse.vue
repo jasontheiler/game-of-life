@@ -83,7 +83,7 @@ const onPress = ({ clientX, clientY }: MouseEvent | Touch) => {
 </script>
 
 <template>
-  <div class="flex-shrink-0 relative w-full h-full shadow">
+  <div class="flex-shrink-0 relative w-full h-full shadow overflow-hidden">
     <canvas
       ref="canvasElement"
       class="w-full h-full bg-darkGray cursor-pointer"
@@ -101,12 +101,7 @@ const onPress = ({ clientX, clientY }: MouseEvent | Touch) => {
       @contextmenu.prevent
     />
 
-    <div
-      v-if="universeStore.config.showFramerate"
-      class="absolute right-4 bottom-4 px-3 py-1.5 rounded-xl bg-lightGray text-white"
-    >
-      {{ universeStore.realFramerate }}fps
-    </div>
+    <TheFramerateDisplay />
   </div>
 </template>
 

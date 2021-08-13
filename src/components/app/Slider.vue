@@ -7,10 +7,6 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  id: {
-    type: String,
-    required: true,
-  },
   min: {
     type: Number,
     default: 0,
@@ -44,43 +40,35 @@ const onInput = ({ target }: any) =>
 </script>
 
 <template>
-  <div class="relative">
-    <label
-      :for="id"
-      class="-mb-3 text-left text-3xl whitespace-nowrap select-none"
-    >
-      {{ label }}
-    </label>
+  <label class="flex flex-col gap-2 text-3xl select-none">
+    {{ label }}
 
-    <input
-      v-bind="$attrs"
-      :value="scale.invert(value)"
-      :id="id"
-      :min="min"
-      :max="max"
-      type="range"
-      class="appearance-none w-full h-2 rounded-full bg-black bg-opacity-10 shadow-inner transition-shadow duration-100 cursor-pointer hover:(bg-opacity-20) focus-visible:(outline-none ring ring-current)"
-      @input="onInput($event)"
-    />
-
-    <div
-      class="-mt-2 text-right text-3xl text-blueGray-600 whitespace-nowrap select-none"
-    >
-      {{ props.modelValue }}{{ props.unit }}
+    <div class="relative w-full h-2 rounded-full nm-flat-green-sm">
+      <input
+        v-bind="$attrs"
+        :value="scale.invert(value)"
+        :min="min"
+        :max="max"
+        type="range"
+        class="appearance-none absolute w-full h-full rounded-full bg-transparent cursor-pointer focus-visible:(outline-none ring ring-current)"
+        @input="onInput($event)"
+      />
     </div>
-  </div>
+
+    <span class="text-right">{{ props.modelValue }}{{ props.unit }}</span>
+  </label>
 </template>
 
 <style scoped>
 input[type="range"]::-webkit-slider-thumb {
-  @apply appearance-none w-6 h-6 rounded-full bg-current shadow-lg;
+  @apply appearance-none w-8 h-8 rounded-full nm-concave-green;
 }
 
 input[type="range"]::-moz-range-thumb {
-  @apply appearance-none w-6 h-6 rounded-full bg-current shadow-lg;
+  @apply appearance-none w-8 h-8 rounded-full nm-concave-green;
 }
 
 input[type="range"]::-ms-thumb {
-  @apply appearance-none w-6 h-6 rounded-full bg-current shadow-lg;
+  @apply appearance-none w-8 h-8 rounded-full nm-concave-green;
 }
 </style>

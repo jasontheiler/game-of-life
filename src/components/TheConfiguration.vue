@@ -29,7 +29,7 @@ useEventListener("resize", () => set(isOpen, false));
   >
     <button
       :aria-label="`${isOpen ? 'Close' : 'Open'} configuration`"
-      class="w-full h-8 flex justify-center items-center text-lg focus-visible:(outline-none ring-4 ring-current) xl:(w-8 h-full)"
+      class="w-full h-10 flex justify-center items-center text-lg focus-visible:(outline-none ring-4 ring-current) xl:(w-10 h-full)"
       @click="toggleOpen()"
     >
       <IFaSolidChevronUp
@@ -53,7 +53,7 @@ useEventListener("resize", () => set(isOpen, false));
         :enter="{
           width: gtXl ? '32rem' : '100%',
           maxWidth: gtXl ? 'auto' : '32rem',
-          height: '16rem',
+          height: '20rem',
         }"
         :leave="{
           width: gtXl ? '0rem' : '0%',
@@ -65,12 +65,11 @@ useEventListener("resize", () => set(isOpen, false));
         }"
         class="w-full overflow-hidden"
       >
-        <div class="w-full h-full p-6">
+        <div class="w-full h-full p-6 flex flex-col gap-4">
           <AppSlider
             v-model.number="universeStore.config.cellSize"
             :min="1"
-            :max="24"
-            id="cell-size"
+            :max="32"
             label="cell_size"
             unit="px"
           />
@@ -80,15 +79,13 @@ useEventListener("resize", () => set(isOpen, false));
             :min="1"
             :max="250"
             :scaling-exponent="3"
-            id="target-framerate"
             label="target_framerate"
             unit="fps"
           />
 
           <AppCheckbox
-            v-model="universeStore.config.showFramerate"
-            id="show-framerate"
-            label="show_framerate"
+            v-model="universeStore.config.displayFramerate"
+            label="display_framerate"
           />
         </div>
       </div>

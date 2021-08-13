@@ -16,7 +16,7 @@ export const useUniverseStore = defineStore({
       config: {
         cellSize: 16,
         targetFramerate: 30,
-        showFramerate: false,
+        displayFramerate: false,
       },
     };
   },
