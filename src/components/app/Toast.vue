@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useMotions } from "@vueuse/motion";
 
-const props = defineProps({
+defineProps({
   isShown: {
     type: Boolean,
     required: true,
@@ -14,7 +14,7 @@ const motions = useMotions();
 <template>
   <Transition :css="false" @leave="(_, done) => motions.toast.leave(done)">
     <div
-      v-if="props.isShown"
+      v-if="isShown"
       v-motion="'toast'"
       :initial="{
         transform: 'translateX(-100%)',

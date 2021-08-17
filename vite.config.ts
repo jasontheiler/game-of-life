@@ -5,7 +5,7 @@ import ViteComponents from "vite-plugin-components";
 import ViteIcons, { ViteIconsResolver } from "vite-plugin-icons";
 import ViteRsw from "vite-plugin-rsw";
 import ViteWindiCSS from "vite-plugin-windicss";
-import Vue from "@vitejs/plugin-vue";
+import ViteVue from "@vitejs/plugin-vue";
 
 // Vite configuration
 // See: https://vitejs.dev/config/
@@ -51,6 +51,6 @@ export default defineConfig({
       crates: ["universe"],
     }),
     ViteWindiCSS(),
-    Vue(),
+    ViteVue(),
   ],
 });

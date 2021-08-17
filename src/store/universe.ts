@@ -4,9 +4,7 @@ import { get, set, throttledWatch, useLocalStorage } from "@vueuse/core";
 import { getDevicePixels } from "~/utils";
 import { Universe } from "~/wasm/universe/pkg";
 
-export const useUniverseStore = defineStore({
-  id: "universe",
-
+export const useUniverseStore = defineStore("universe", {
   state() {
     return {
       universe: null as Universe | null,

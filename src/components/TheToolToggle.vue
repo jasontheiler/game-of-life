@@ -7,9 +7,8 @@ const props = defineProps({
     required: true,
   },
 });
-const emit = defineEmits(["update:modelValue"]);
 
-const value = useVModel(props, "modelValue", emit);
+const value = useVModel(props, "modelValue");
 const toggleValue = useToggle(value);
 </script>
 

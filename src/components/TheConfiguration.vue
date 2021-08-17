@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {
+  breakpointsTailwind,
   set,
   useBreakpoints,
   useEventListener,
   useToggle,
-  breakpointsTailwind,
 } from "@vueuse/core";
 import { useMotions } from "@vueuse/motion";
 

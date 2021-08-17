@@ -55,7 +55,7 @@ const onInput = ({ target }: any) =>
       />
     </div>
 
-    <span class="text-right">{{ props.modelValue }}{{ props.unit }}</span>
+    <span class="text-right">{{ modelValue }}{{ unit }}</span>
   </label>
 </template>
 

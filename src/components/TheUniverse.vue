@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useEventListener } from "@vueuse/core";
+import { get, set, useEventListener } from "@vueuse/core";
 
 import { getDevicePixels, getPositionInElement } from "~/utils";
 import { useUniverseStore } from "~/store";
@@ -43,11 +43,11 @@ const changeCellAt = (x: number, y: number) => {
   x = getDevicePixels(x);
   y = getDevicePixels(y);
 
-  if (presses.value[0])
+  if (get(presses)[0])
     universeStore.areToolsSwitched
       ? universeStore.universe?.killCellAt(x, y)
       : universeStore.universe?.reviveCellAt(x, y);
-  if (presses.value[1])
+  if (get(presses)[1])
     universeStore.areToolsSwitched
       ? universeStore.universe?.reviveCellAt(x, y)
       : universeStore.universe?.killCellAt(x, y);
@@ -78,7 +78,7 @@ const onPress = ({ clientX, clientY }: MouseEvent | Touch) => {
 
   changeCellAt(x, y);
 
-  prevPosition.value = [x, y];
+  set(prevPosition, [x, y]);
 };
 </script>
 

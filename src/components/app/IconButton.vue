@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 
-const props = defineProps({
+defineProps({
   size: {
     type: String as PropType<"sm" | "base" | "lg">,
     default: "base",
@@ -18,13 +18,13 @@ const props = defineProps({
   <button
     v-bind="$attrs"
     :class="{
-      'w-8 h-8 text-xs': props.size === 'sm',
-      'w-12 h-12 text-lg': props.size === 'base',
-      'w-18 h-18 text-2xl': props.size === 'lg',
+      'w-8 h-8 text-xs': size === 'sm',
+      'w-12 h-12 text-lg': size === 'base',
+      'w-18 h-18 text-2xl': size === 'lg',
       'nm-concave-green-lg text-darkGray active:(nm-inset-green-lg)':
-        props.variant === 'primary',
+        variant === 'primary',
       'nm-concave-lightGray-lg text-white active:(nm-inset-lightGray-lg)':
-        props.variant === 'secondary',
+        variant === 'secondary',
     }"
     class="group rounded-full focus-visible:(outline-none)"
   >
