@@ -11,14 +11,12 @@ onMounted(() => universeStore.init());
 const canvasElement = ref<HTMLCanvasElement>();
 
 onMounted(async () => {
-  if (!canvasElement.value) return;
-
   await initUniverse();
 
-  const { clientWidth, clientHeight } = canvasElement.value;
+  const { clientWidth, clientHeight } = get(canvasElement)!;
 
   universeStore.universe = new Universe(
-    canvasElement.value,
+    get(canvasElement)!,
     getDevicePixels(clientWidth),
     getDevicePixels(clientHeight),
     getDevicePixels(universeStore.config.cellSize),
@@ -27,9 +25,7 @@ onMounted(async () => {
 });
 
 useEventListener("resize", () => {
-  if (!canvasElement.value) return;
-
-  const { clientWidth, clientHeight } = canvasElement.value;
+  const { clientWidth, clientHeight } = get(canvasElement)!;
 
   universeStore.universe?.setSize(
     getDevicePixels(clientWidth),
@@ -56,12 +52,10 @@ const changeCellAt = (x: number, y: number) => {
 const prevPosition = ref<[number, number] | null>(null);
 
 const onPress = ({ clientX, clientY }: MouseEvent | Touch) => {
-  if (!canvasElement.value) return;
+  const [x, y] = getPositionInElement(get(canvasElement)!, [clientX, clientY]);
 
-  const [x, y] = getPositionInElement(canvasElement.value, [clientX, clientY]);
-
-  if (prevPosition.value) {
-    const [prevX, prevY] = prevPosition.value;
+  if (get(prevPosition)) {
+    const [prevX, prevY] = get(prevPosition)!;
 
     const vecX = x - prevX;
     const vecY = y - prevY;
