@@ -1,4 +1,3 @@
-import "vue-global-api";
 import "virtual:windi.css";
 import "@fontsource/roboto-mono/latin.css";
 

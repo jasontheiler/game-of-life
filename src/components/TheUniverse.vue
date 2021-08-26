@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { get, set, useEventListener } from "@vueuse/core";
-
 import { getDevicePixels, getPositionInElement } from "~/utils";
 import { useUniverseStore } from "~/store";
 import initUniverse, { Universe } from "~/wasm/universe/pkg";

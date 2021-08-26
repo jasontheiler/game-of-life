@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { get, set, throttledWatch, useLocalStorage } from "@vueuse/core";
 
 import { getDevicePixels } from "~/utils";
 import { Universe } from "~/wasm/universe/pkg";

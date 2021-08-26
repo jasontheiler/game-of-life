@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { get, set, useVModel } from "@vueuse/core";
 import { scalePow } from "d3-scale";
 
 const props = defineProps({

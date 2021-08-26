@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import {
-  breakpointsTailwind,
-  set,
-  useBreakpoints,
-  useEventListener,
-  useToggle,
-} from "@vueuse/core";
+import { breakpointsTailwind } from "@vueuse/core";
 import { useMotions } from "@vueuse/motion";
 
 import { useUniverseStore } from "~/store";

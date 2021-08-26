@@ -1,6 +1,7 @@
 import path from "path";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
+import ViteAutoImport from "unplugin-auto-import/vite";
 import ViteComponents from "vite-plugin-components";
 import ViteIcons, { ViteIconsResolver } from "vite-plugin-icons";
 import ViteRsw from "vite-plugin-rsw";
@@ -39,6 +40,16 @@ export default defineConfig({
         ],
       },
     }),
+    ViteAutoImport({
+      imports: [
+        "vue",
+        "@vueuse/core",
+        {
+          "@vueuse/core": ["get", "set"],
+        },
+      ],
+    }),
+    ViteVue(),
     ViteComponents({
       directoryAsNamespace: true,
       globalComponentsDeclaration: true,
@@ -51,6 +62,5 @@ export default defineConfig({
       crates: ["universe"],
     }),
     ViteWindiCSS(),
-    ViteVue(),
   ],
 });

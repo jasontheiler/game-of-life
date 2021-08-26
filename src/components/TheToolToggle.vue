@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useToggle, useVModel } from "@vueuse/core";
-
 const props = defineProps({
   modelValue: {
     type: Boolean,
