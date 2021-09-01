@@ -37,6 +37,7 @@ export default defineConfig({
     }),
     VueComponents({
       directoryAsNamespace: true,
+      dts: true,
       resolvers: [IconsResolver()],
     }),
     Icons(),
