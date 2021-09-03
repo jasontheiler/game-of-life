@@ -1,11 +1,12 @@
 import { defineConfig, transform } from "windicss/helpers";
 import defaultTheme from "windicss/defaultTheme";
 
-// Windi CSS configuration
 // See: https://windicss.org/guide/configuration.html
 export default defineConfig({
   plugins: [
+    // See: https://windicss.org/plugins/community/interaction-variants.html
     require("@windicss/plugin-interaction-variants"),
+    // See: https://github.com/sambeevors/tailwindcss-neumorphism
     transform("tailwindcss-neumorphism"),
   ],
 

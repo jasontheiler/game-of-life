@@ -4,12 +4,11 @@ import Vue from "@vitejs/plugin-vue";
 import WindiCSS from "vite-plugin-windicss";
 import Rsw from "vite-plugin-rsw";
 import AutoImport from "unplugin-auto-import/vite";
-import VueComponents from "unplugin-vue-components/vite";
 import Icons from "unplugin-icons/vite";
 import IconsResolver from "unplugin-icons/resolver";
+import VueComponents from "unplugin-vue-components/vite";
 import { VitePWA as PWA } from "vite-plugin-pwa";
 
-// Vite configuration
 // See: https://vitejs.dev/config/
 export default defineConfig({
   resolve: {
@@ -19,13 +18,17 @@ export default defineConfig({
   },
 
   plugins: [
+    // See: https://vitejs.dev/plugins/
     Vue(),
+    // See: https://windicss.org/integrations/vite.html
     WindiCSS(),
+    // See: https://github.com/lencx/vite-plugin-rsw
     Rsw({
       cli: "pnpm",
       root: "./src/wasm",
       crates: ["universe"],
     }),
+    // See: https://github.com/antfu/unplugin-auto-import
     AutoImport({
       imports: [
         "vue",
@@ -35,12 +38,15 @@ export default defineConfig({
         },
       ],
     }),
+    // See: https://github.com/antfu/unplugin-icons
+    Icons(),
+    // See: https://github.com/antfu/unplugin-vue-components
     VueComponents({
       directoryAsNamespace: true,
       dts: true,
       resolvers: [IconsResolver()],
     }),
-    Icons(),
+    // See: https://vite-plugin-pwa.netlify.app/
     PWA({
       manifest: {
         name: "Conway's Game of Life",

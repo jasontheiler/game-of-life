@@ -1,5 +1,6 @@
 dist
 node_modules
 wasm
+auto-imports.d.ts
 components.d.ts
 pnpm-lock.yaml
