@@ -1,29 +1,21 @@
 <script setup lang="ts">
 import { scalePow } from "d3-scale";
 
-const props = defineProps({
-  modelValue: {
-    type: Number,
-    required: true,
-  },
-  min: {
-    type: Number,
-    default: 0,
-  },
-  max: {
-    type: Number,
-    default: 100,
-  },
-  scalingExponent: {
-    type: Number,
-    default: 1,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  unit: String,
-});
+const props = withDefaults(
+  defineProps<{
+    modelValue: number;
+    min?: number;
+    max?: number;
+    scalingExponent?: number;
+    label: string;
+    unit?: string;
+  }>(),
+  {
+    min: 0,
+    max: 100,
+    scalingExponent: 1,
+  }
+);
 
 const value = useVModel(props, "modelValue");
 

@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { useMotions } from "@vueuse/motion";
 
-defineProps({
-  isShown: {
-    type: Boolean,
-    required: true,
-  },
-});
+defineProps<{ isShown: boolean }>();
 
 const motions = useMotions();
 </script>

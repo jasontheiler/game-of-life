@@ -1,17 +1,14 @@
 <script setup lang="ts">
-import { PropType } from "vue";
-
-defineProps({
-  size: {
-    type: String as PropType<"sm" | "base" | "lg">,
-    default: "base",
-  },
-
-  variant: {
-    type: String as PropType<"primary" | "secondary">,
-    default: "primary",
-  },
-});
+withDefaults(
+  defineProps<{
+    size?: "sm" | "base" | "lg";
+    variant?: "primary" | "secondary";
+  }>(),
+  {
+    size: "base",
+    variant: "primary",
+  }
+);
 </script>
 
 <template>

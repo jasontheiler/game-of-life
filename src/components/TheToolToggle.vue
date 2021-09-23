@@ -1,10 +1,5 @@
 <script setup lang="ts">
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    required: true,
-  },
-});
+const props = defineProps<{ modelValue: boolean }>();
 
 const value = useVModel(props, "modelValue");
 const toggleValue = useToggle(value);

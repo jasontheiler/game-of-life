@@ -1,14 +1,5 @@
 <script setup lang="ts">
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-});
+const props = defineProps<{ modelValue: boolean; label: string }>();
 
 const value = useVModel(props, "modelValue");
 </script>

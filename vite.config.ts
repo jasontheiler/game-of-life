@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import { defineConfig } from "vite";
 import Vue from "@vitejs/plugin-vue";
 import WindiCSS from "vite-plugin-windicss";
@@ -30,13 +30,7 @@ export default defineConfig({
     }),
     // See: https://github.com/antfu/unplugin-auto-import
     AutoImport({
-      imports: [
-        "vue",
-        "@vueuse/core",
-        {
-          "@vueuse/core": ["get", "set"],
-        },
-      ],
+      imports: ["vue", "@vueuse/core", { "@vueuse/core": ["get", "set"] }],
     }),
     // See: https://github.com/antfu/unplugin-icons
     Icons(),
@@ -56,16 +50,8 @@ export default defineConfig({
         theme_color: "#41b883",
         background_color: "#0b1015",
         icons: [
-          {
-            src: "/pwa-192x192.png",
-            sizes: "192x192",
-            type: "image/png",
-          },
-          {
-            src: "/pwa-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-          },
+          { src: "/pwa-192x192.png", sizes: "192x192", type: "image/png" },
+          { src: "/pwa-512x512.png", sizes: "512x512", type: "image/png" },
         ],
       },
     }),
