@@ -13,7 +13,7 @@
 </template>
 
 <style>
-*:focus {
+:focus:not(:focus-visible) {
   @apply !outline-none;
 }
 
