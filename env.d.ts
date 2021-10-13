@@ -1,4 +1,3 @@
-/// <reference types="@types/node" />
 /// <reference types="vite/client" />
 
 declare module "*.vue" {
