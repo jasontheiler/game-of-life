@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import { breakpointsTailwind } from "@vueuse/core";
-import { useMotions } from "@vueuse/motion";
+import { animate, spring } from "motion";
 
 import { useUniverseStore } from "~/store";
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const gtXl = breakpoints.greater("xl");
 
-const motions = useMotions();
-
 const universeStore = useUniverseStore();
 
 const [isOpen, toggleOpen] = useToggle(false);
-
 useEventListener("resize", () => set(isOpen, false));
 </script>
 
@@ -33,31 +30,32 @@ useEventListener("resize", () => set(isOpen, false));
 
     <Transition
       :css="false"
-      @leave="(_, done) => motions.configuration.leave(done)"
+      @enter="
+        (element, done) =>
+          animate(
+            element,
+            {
+              width: gtXl ? ['0rem', '32rem'] : ['0%', '100%'],
+              maxWidth: gtXl ? 'auto' : ['0rem', '32rem'],
+              height: ['0rem', '20rem'],
+            },
+            { easing: spring() }
+          ).finished.then(done)
+      "
+      @leave="
+        (element, done) =>
+          animate(
+            element,
+            {
+              width: gtXl ? '0rem' : '0%',
+              maxWidth: gtXl ? 'auto' : '0rem',
+              height: '0rem',
+            },
+            { easing: spring() }
+          ).finished.then(done)
+      "
     >
-      <div
-        v-if="isOpen"
-        v-motion="'configuration'"
-        :initial="{
-          width: gtXl ? '0rem' : '0%',
-          maxWidth: gtXl ? 'auto' : '0rem',
-          height: '0rem',
-        }"
-        :enter="{
-          width: gtXl ? '32rem' : '100%',
-          maxWidth: gtXl ? 'auto' : '32rem',
-          height: '20rem',
-        }"
-        :leave="{
-          width: gtXl ? '0rem' : '0%',
-          maxWidth: gtXl ? 'auto' : '0rem',
-          height: '0rem',
-          transition: {
-            ease: 'anticipate',
-          },
-        }"
-        class="w-full overflow-hidden"
-      >
+      <div v-if="isOpen" class="w-full overflow-hidden">
         <div class="w-full h-full p-6 flex flex-col gap-4">
           <AppSlider
             v-model.number="universeStore.config.cellSize"
