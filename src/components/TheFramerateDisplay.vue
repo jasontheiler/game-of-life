@@ -13,17 +13,15 @@ const universeStore = useUniverseStore();
       (element, done) =>
         animate(
           element,
-          { transform: ['translateX(100%)', 'translateX(0%)'] },
+          { x: ['100%', '0%'] },
           { easing: spring() }
         ).finished.then(done)
     "
     @leave="
       (element, done) =>
-        animate(
-          element,
-          { transform: 'translateX(100%)' },
-          { easing: spring() }
-        ).finished.then(done)
+        animate(element, { x: '100%' }, { easing: spring() }).finished.then(
+          done
+        )
     "
   >
     <div

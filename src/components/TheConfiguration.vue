@@ -36,7 +36,7 @@ useEventListener("resize", () => set(isOpen, false));
             element,
             {
               width: gtXl ? ['0rem', '32rem'] : ['0%', '100%'],
-              maxWidth: gtXl ? 'auto' : ['0rem', '32rem'],
+              maxWidth: gtXl ? '' : ['0rem', '32rem'],
               height: ['0rem', '20rem'],
             },
             { easing: spring() }
@@ -48,7 +48,7 @@ useEventListener("resize", () => set(isOpen, false));
             element,
             {
               width: gtXl ? '0rem' : '0%',
-              maxWidth: gtXl ? 'auto' : '0rem',
+              maxWidth: gtXl ? '' : '0rem',
               height: '0rem',
             },
             { easing: spring() }

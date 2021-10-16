@@ -11,17 +11,15 @@ defineProps<{ isShown: boolean }>();
       (element, done) =>
         animate(
           element,
-          { transform: ['translateX(-100%)', 'translateX(0%)'] },
+          { x: ['-100%', '0%'] },
           { easing: spring() }
         ).finished.then(done)
     "
     @leave="
       (element, done) =>
-        animate(
-          element,
-          { transform: 'translateX(-100%)' },
-          { easing: spring() }
-        ).finished.then(done)
+        animate(element, { x: '-100%' }, { easing: spring() }).finished.then(
+          done
+        )
     "
   >
     <div v-if="isShown" role="alert" class="fixed z-10 p-4">
