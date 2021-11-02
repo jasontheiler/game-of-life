@@ -22,8 +22,10 @@ export default defineConfig({
       purple: "#997fff",
     },
 
-    fontFamily: {
-      sans: ["'Roboto Mono'", ...defaultTheme.fontFamily.sans],
+    extend: {
+      fontFamily: {
+        sans: ["'Roboto Mono'", ...defaultTheme.fontFamily.sans],
+      },
     },
   },
 });
